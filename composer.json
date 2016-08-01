@@ -19,7 +19,8 @@
         "maknz/slack": "^1.7",
         "prologue/alerts": "^0.4.0",
         "laravelcollective/html": "~5.0",
-        "watson/bootstrap-form": "^1.0"
+        "watson/bootstrap-form": "^1.0",
+        "spatie/laravel-google-calendar": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
