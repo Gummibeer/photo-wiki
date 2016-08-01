@@ -158,6 +158,7 @@ return [
         Prologue\Alerts\AlertsServiceProvider::class,
         Fenos\Notifynder\NotifynderServiceProvider::class,
         Maknz\Slack\SlackServiceProvider::class,
+        Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -223,6 +224,7 @@ return [
         'Notifynder' => Fenos\Notifynder\Facades\Notifynder::class,
         'Slack' => Maknz\Slack\Facades\Slack::class,
         'Alert' => Prologue\Alerts\Facades\Alert::class,
+        'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
 
     ],
 
