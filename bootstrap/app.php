@@ -12,7 +12,7 @@
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
 
 /*
@@ -40,6 +40,55 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+
+/*
+|--------------------------------------------------------------------------
+| Configure Monolog
+|--------------------------------------------------------------------------
+*/
+
+$app->configureMonologUsing(function (Monolog\Logger $monolog) {
+    function is_valid_log_driver(array $driver)
+    {
+        return (
+            array_get($driver, 'enabled', true) &&
+            array_key_exists('handler', $driver) &&
+            array_key_exists('args', $driver) &&
+            class_exists($driver['handler']) &&
+            is_array($driver['args'])
+        );
+    }
+
+    $drivers = config('monolog.drivers');
+    if (is_array($drivers) && !empty($drivers)) {
+        foreach ($drivers as $driver) {
+            try {
+                if (is_valid_log_driver($driver)) {
+                    $handler = (new ReflectionClass($driver['handler']))->newInstanceArgs($driver['args']);
+                    $monolog->pushHandler($handler);
+                }
+            } catch (Exception $e) {
+                // ignore it
+            }
+        }
+    }
+
+    $monolog->pushProcessor(new \Monolog\Processor\WebProcessor($_SERVER));
+    $monolog->pushProcessor(function ($record) {
+        try {
+            $record['extra']['session_id'] = Cookie::get(Config::get('session.cookie'));
+            $record['extra']['app_name'] = config('app.name');
+            $record['extra']['app_version'] = config('app.version');
+            if (Auth::check()) {
+                $record['extra']['account_id'] = Auth::id();
+                $record['extra']['account_email'] = Auth::user()->email;
+            }
+        } catch (Exception $e) {
+            // ignore it
+        }
+        return $record;
+    });
+});
 
 /*
 |--------------------------------------------------------------------------

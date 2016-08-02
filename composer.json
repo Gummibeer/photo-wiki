@@ -11,6 +11,7 @@
         "ext-ldap": "*",
         "ext-json": "*",
         "ext-dom": "*",
+        "ext-curl": "*",
         "laravel/framework": "5.2.*",
         "gummibeer/laravel-finediff": "^1.0",
         "maddhatter/laravel-fullcalendar": "^1.2",

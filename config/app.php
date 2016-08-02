@@ -2,6 +2,9 @@
 
 return [
 
+    'name' => env('APP_NAME', 'Photo-Wiki'),
+    'version' => env('APP_VERSION', '0.1'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
