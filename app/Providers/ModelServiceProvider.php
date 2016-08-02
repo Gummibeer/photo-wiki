@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Libs\BouncerSeeder;
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ModelServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Bouncer::seeder(BouncerSeeder::class);
+        User::created(function(User $user) {
+            $user->allow('edit', $user);
+        });
     }
 
     /**

@@ -5,5 +5,9 @@ return [
     'email' => __('E-Mail'),
     'language' => __('Sprache'),
     'password' => __('Passwort'),
-    'remember' => __('speichern')
+    'password_confirmation' => __('Passwort wiederholen'),
+    'remember' => __('speichern'),
+    'first_name' => __('Vorname'),
+    'last_name' => __('Nachname'),
+    'nickname' => __('Benutzername'),
 ];

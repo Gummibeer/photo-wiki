@@ -19,15 +19,23 @@ Route::group([
         ->name('auth.get.login');
     Route::post('login', 'AuthController@login')
         ->name('auth.post.login');
+    Route::get('register', 'AuthController@showRegistrationForm')
+        ->name('auth.get.register');
+    Route::post('register', 'AuthController@register')
+        ->name('auth.post.register');
     Route::get('logout', 'AuthController@logout')
         ->name('auth.get.logout');
+
+    Route::get('verification/{token}', 'AuthController@getVerification')
+        ->name('auth.get.verification');
+    Route::get('verification/error', 'AuthController@getVerificationError')
+        ->name('auth.get.verification.error');
 });
 
 /* APP */
 Route::group([
     'prefix' => 'app',
     'namespace' => 'App',
-    'middleware' => ['auth'],
 ], function () {
     Route::get('/dashboard', 'DashboardController@getShow')
         ->name('app.get.dashboard.show');

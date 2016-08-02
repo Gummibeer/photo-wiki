@@ -24,11 +24,18 @@
                     {!! BTForm::text('nickname', null, null, [
                         'readonly' => true,
                     ]) !!}
+                </div>
+                <div class="col-md-6">
                     {!! BTForm::text('first_name') !!}
                     {!! BTForm::text('last_name') !!}
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
-                    {!! BTForm::select('language', null, \Datamap::getLanguages()->pluck('display_name', 'locale')) !!}
+                    {!! BTForm::password('password') !!}
+                </div>
+                <div class="col-md-6">
+                    {!! BTForm::password('password_confirmation') !!}
                 </div>
             </div>
         </div>

@@ -177,6 +177,8 @@ return [
         Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+        Jrean\UserVerification\UserVerificationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -246,6 +248,7 @@ return [
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
         'Datatables' => Yajra\Datatables\Datatables::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
 
         'Helper' => App\Facades\HelperFacade::class,
         'Datamap' => App\Facades\DatamapFacade::class,

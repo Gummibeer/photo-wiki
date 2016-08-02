@@ -20,4 +20,8 @@
     ]) !!}
 
     {!!BTForm::close() !!}
+
+    <a href="{{ route('auth.get.register') }}" class="btn btn-link btn-block">
+        {{ __('Registrieren') }}
+    </a>
 @endsection

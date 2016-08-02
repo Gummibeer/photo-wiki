@@ -19,9 +19,6 @@ class UserDataTable extends DataTable
             ->addColumn('action', function (User $user) {
                 return '<div class="text-center"><a href="' . route('app.management.get.user.edit', $user->getKey()) . '" title="' . __('Bearbeiten') . '"><i class="icon wh-edit"></i></a></div>';
             })
-            ->editColumn('is_root', function ($row) {
-                return \Datamap::getYesNo($row['is_root']);
-            })
             ->make(true);
     }
 
@@ -62,17 +59,14 @@ class UserDataTable extends DataTable
             'email' => [
                 'title' => __('E-Mail'),
             ],
+            'nickname' => [
+                'title' => __('Benutzername'),
+            ],
             'first_name' => [
                 'title' => __('Vorname'),
             ],
             'last_name' => [
                 'title' => __('Nachname'),
-            ],
-            'is_root' => [
-                'title' => __('Admin'),
-            ],
-            'language' => [
-                'title' => __('Sprache'),
             ],
         ];
     }

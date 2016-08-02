@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Jrean\UserVerification\Exceptions\TokenMismatchException;
+use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
+use Jrean\UserVerification\Exceptions\UserNotFoundException;
+use Jrean\UserVerification\Traits\VerifiesUsers;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -10,63 +15,90 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins, VerifiesUsers;
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
-
-    /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/';
+    protected $redirectIfVerificationFails = 'auth/login';
 
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerificationError', 'getVerification']]);
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'nickname' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|confirmed|min:'.User::PASSWORD_MIN_LENGTH,
+            'g-recaptcha-response' => 'required|captcha',
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'nickname' => $data['nickname'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function getVerification(Request $request, $token)
+    {
+        $this->validateRequest($request);
+
+        try {
+            \UserVerification::process($request->input('email'), $token, $this->userTable());
+        } catch (UserNotFoundException $e) {
+            return redirect($this->redirectIfVerificationFails());
+        } catch (UserIsVerifiedException $e) {
+            return redirect($this->redirectIfVerified());
+        } catch (TokenMismatchException $e) {
+            return redirect($this->redirectIfVerificationFails());
+        }
+        
+        $user = User::byEmail($request->input('email'))->first();
+        \Auth::login($user);
+
+        \Alert::success(trans('alerts.verification_success'))->flash();
+        return redirect($this->redirectAfterVerification());
+    }
+
+    public function getVerificationError()
+    {
+        if(\Auth::check()) {
+            \Auth::logout();
+        }
+        \Alert::danger(trans('alerts.verification_failed'))->flash();
+        return $this->showLoginForm();
+    }
+    
+    protected function authenticated(Request $request, User $user)
+    {
+        if($user->verified) {
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return $this->getVerificationError();
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $user = $this->create($request->all());
+
+        \UserVerification::generate($user);
+        \UserVerification::send($user, __('Photo-Wiki Bastätigungsemail'));
+
+        \Alert::success(trans('alerts.verification_send'))->flash();
+        return redirect($this->redirectPath());
     }
 }

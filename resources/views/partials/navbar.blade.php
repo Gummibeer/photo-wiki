@@ -16,22 +16,29 @@
         </a>
 
         <div class="collapse navbar-collapse" id="am-navbar-collapse">
-
             <ul class="nav navbar-nav navbar-right am-user-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle padding-horizontal-15" aria-expanded="false" role="button" data-toggle="dropdown" href="#">
-                        <img src="{{ \Auth::user()->avatar(50) }}" />
-                        <span class="user-name">{{ \Auth::user()->display_name }}</span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="{{ route('auth.get.logout') }}">
-                                <i class="icon wh-off"></i>
-                                {{ __('Abmelden') }}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @if(\Auth::check())
+                    <li class="dropdown">
+                        <a class="dropdown-toggle padding-horizontal-15" aria-expanded="false" role="button" data-toggle="dropdown" href="#">
+                            <img src="{{ \Auth::user()->avatar(50) }}" />
+                            <span class="user-name">{{ \Auth::user()->display_name }}</span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ route('auth.get.logout') }}">
+                                    <i class="icon wh-off"></i>
+                                    {{ __('Abmelden') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ route('auth.get.login') }}">
+                            {{ __('Anmelden') }}
+                        </a>
+                    </li>
+                @endif
             </ul>
 
             <ul class="nav navbar-nav am-nav-right">
@@ -40,7 +47,7 @@
                         {{ __('Dashboard') }}
                     </a>
                 </li>
-                @can('is-root')
+                @can('manage', \App\Models\User::class)
                     <li class="dropdown">
                         <a class="dropdown-toggle" aria-expanded="false" role="button" data-toggle="dropdown" href="#">
                             {{ __('Verwaltung') }}
@@ -57,11 +64,11 @@
                 @endcan
             </ul>
 
+            @if(\Auth::check())
             <ul class="nav navbar-nav navbar-right am-icons-nav">
                 @include('partials.notifications')
             </ul>
-
+            @endif
         </div>
-
     </div>
 </nav>
