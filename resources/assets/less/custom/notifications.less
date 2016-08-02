@@ -1,0 +1,71 @@
+ul#notifications-list {
+  li {
+    .text-content {
+      color: @color-white;
+      font-size: 14px;
+      font-family: @open-sans;
+    }
+    .date {
+      color: @color-grey-300;
+    }
+    &.active {
+      .circle {
+        display: none;
+      }
+    }
+    .logo {
+      background: @color-white;
+    }
+
+    &.notification-success {
+      .notification-style(@brand-success);
+    }
+
+    &.notification-danger {
+      .notification-style(@brand-danger);
+    }
+  }
+}
+
+.notification-style(@color) {
+  background: @color-white;
+  &:not(.active) {
+    .text-content {
+      color: @text-color;
+    }
+    .date {
+      color: @text-muted;
+    }
+  }
+  &.active {
+    background: @color;
+  }
+  .logo {
+    .icon {
+      color: @color;
+    }
+  }
+
+  &:hover {
+    background: @color-white;
+    .text-content {
+      color: @text-color;
+    }
+    .date {
+      color: @text-muted;
+    }
+    .logo {
+      background: @color;
+      .icon {
+        color: @color-white;
+      }
+    }
+
+    &.active {
+      .circle {
+        display: block;
+        background: @color;
+      }
+    }
+  }
+}

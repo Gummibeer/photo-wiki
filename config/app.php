@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'de-de',
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,20 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'de-de',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Locales
+    |--------------------------------------------------------------------------
+    |
+    | All locales that are supported by the application.
+    |
+    */
+
+    'locales' => [
+        'de-de',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -162,6 +175,8 @@ return [
         Fenos\Notifynder\NotifynderServiceProvider::class,
         Maknz\Slack\SlackServiceProvider::class,
         Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -172,6 +187,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DebugServiceProvider::class,
         App\Providers\BladeServiceProvider::class,
+        App\Providers\LibsServiceProvider::class,
 
     ],
 
@@ -228,6 +244,11 @@ return [
         'Slack' => Maknz\Slack\Facades\Slack::class,
         'Alert' => Prologue\Alerts\Facades\Alert::class,
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
+        'Datatables' => Yajra\Datatables\Datatables::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+
+        'Helper' => App\Facades\HelperFacade::class,
+        'Datamap' => App\Facades\DatamapFacade::class,
 
     ],
 

@@ -1,0 +1,30 @@
+.has-error .checkbox,
+.has-error .checkbox-inline,
+.has-error.checkbox-inline label,
+.has-error.checkbox label,
+.has-error .control-label,
+.has-error .help-block,
+.has-error .radio,
+.has-error .radio-inline,
+.has-error.radio-inline label,
+.has-error.radio label {
+  color: @brand-danger;
+}
+.has-error .form-control,
+.has-error .form-control:focus {
+  border-color: @brand-danger;
+}
+
+.radio {
+  input[type="radio"]:checked {
+    + i.icon {
+      color: @brand-primary;
+    }
+  }
+}
+
+.form-control {
+  &:focus {
+    border-color: @brand-primary;
+  }
+}

@@ -1,5 +1,8 @@
 var elixir = require('laravel-elixir');
 
+elixir.config.production = true;
+elixir.config.sourcemaps = false;
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -12,5 +15,5 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.less('style.less', 'public/css/style.min.css');
 });

@@ -1,0 +1,21 @@
+.ui-draggable-dragging {
+  z-index: 10000;
+}
+
+.ui-droppable {
+  min-height: 150px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: @color-white;
+
+  &.ui-droppable-active {
+    padding-bottom: 75px;
+    background: @color-grey-400;
+    border-color: @color-grey-400;
+
+    &.highlight-primary {
+      background: @color-primary-100;
+      border-color: @color-primary-100;
+    }
+  }
+}

@@ -13,13 +13,13 @@ return [
      * please specific it here, this option is not
      * considerate if using notifynder as polymorphic
      */
-    'model' => 'App\User',
+    'model' => \App\Models\User::class,
 
     /*
      * Do you want have notifynder that work polymorphically?
      * just swap the value to true and you will able to use it!
      */
-    'polymorphic' => false,
+    'polymorphic' => true,
 
     /*
      * If you need to extend the model class of
@@ -27,7 +27,7 @@ return [
      * With the path / NameSpace of your model and extend it
      * with Fenos\Notifynder\Models\Notification
      */
-    'notification_model' => 'Fenos\Notifynder\Models\Notification',
+    'notification_model' => \Fenos\Notifynder\Models\Notification::class,
 
     /*
      * Coordinating a lots notifications that require extra params
@@ -47,8 +47,9 @@ return [
      * the language you wish to translate ex 'it' or 'italian' and pass as
      * value an array with the translations
      */
-    'translations'  => [
-
+    'translation'  => [
+        'enabled' => true,
+        'domain' => 'notifications',
     ],
 
     /*
