@@ -179,6 +179,7 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         Jrean\UserVerification\UserVerificationServiceProvider::class,
+        AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
 
         /*
          * Application Service Providers...
