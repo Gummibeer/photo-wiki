@@ -39,6 +39,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'display_name',
     ];
 
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_attendees');
+    }
+
     public function avatar($size = 32)
     {
         return 'https://gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=' . $size;
