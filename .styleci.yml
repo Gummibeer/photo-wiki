@@ -5,7 +5,7 @@ risky: false
 linting: true
 
 finder:
-name:
+  name:
     - "*.php"
   not-name:
     - "*.blade.php"
