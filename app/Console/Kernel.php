@@ -31,5 +31,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('auth:clear-resets')->hourly();
         $schedule->command('bouncer:seed')->hourly();
+        $schedule->command('calendar:import')->hourly();
     }
 }
