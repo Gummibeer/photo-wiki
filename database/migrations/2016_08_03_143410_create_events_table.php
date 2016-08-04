@@ -15,13 +15,8 @@ class CreateEventsTable extends Migration
             $table->timestamp('ending_at');
             $table->string('timezone');
             $table->boolean('all_day');
-            $table->string('address_street')->nullable();
-            $table->string('address_number')->nullable();
-            $table->string('address_zip')->nullable();
-            $table->string('address_city')->nullable();
-            $table->string('address_country')->nullable();
-            $table->string('address_country_code')->nullable();
-            $table->string('geoloc')->nullable();
+            $table->text('location')->nullable();
+            $table->text('geoloc')->nullable();
             $table->text('description')->nullable();
             $table->string('google_calendar_id')->nullable();
             $table->string('google_event_id')->nullable();

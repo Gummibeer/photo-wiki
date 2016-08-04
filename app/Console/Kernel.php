@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\CompileViews;
 use App\Console\Commands\CreateUser;
+use App\Console\Commands\ImportCalendar;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         CompileViews::class,
         CreateUser::class,
+        ImportCalendar::class,
     ];
 
     /**

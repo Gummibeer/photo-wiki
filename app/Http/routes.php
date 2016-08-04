@@ -45,6 +45,11 @@ Route::group([
             ->name('app.get.user.read-notification');
     });
 
+    Route::group(['prefix' => 'event'], function () {
+        Route::get('/', 'EventController@getIndex')
+            ->name('app.get.event.index');
+    });
+
     Route::group([
         'prefix' => 'management',
         'namespace' => 'Management',

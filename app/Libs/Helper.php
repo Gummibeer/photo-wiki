@@ -2,6 +2,7 @@
 namespace App\Libs;
 
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Queue\Console\WorkCommand;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -141,5 +142,33 @@ class Helper
         ];
 
         return preg_replace(array_keys($colors), $colors, $string);
+    }
+
+    public function getGeolocByAddress($address)
+    {
+        $url = 'https://places-dsn.algolia.net/1/places/query';
+        $data = [
+            'query' => $address,
+            'hitsPerPage' => 1,
+        ];
+
+        $client = new Client([
+            'base_uri' => $url,
+        ]);
+        $response = $client->request('POST', '', [
+            'body' => json_encode($data),
+        ]);
+        if($response->getStatusCode() == 200) {
+            $body = (string) $response->getBody();
+            if(is_json($body)) {
+                $data = json_decode($body, true);
+                if(array_key_exists('hits', $data) && count($data['hits']) > 0) {
+                    $hit = array_first($data['hits']);
+                    if(is_array($hit) && array_key_exists('_geoloc', $hit)) {
+                        return $hit['_geoloc'];
+                    }
+                }
+            }
+        }
     }
 }
