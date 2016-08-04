@@ -10,4 +10,7 @@ return [
     'first_name' => __('Vorname'),
     'last_name' => __('Nachname'),
     'nickname' => __('Benutzername'),
+    'starting_at' => __('Anfang'),
+    'ending_at' => __('Ende'),
+    'location' => __('Standort'),
 ];

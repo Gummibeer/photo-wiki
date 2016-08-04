@@ -40,4 +40,14 @@ class Model extends EloquentModel
     {
         return $this->revisionHistory()->orderBy('created_at', 'desc')->limit($limit)->get();
     }
+
+    public function fill(array $attributes)
+    {
+        if(property_exists($this, 'defaultValues')) {
+            $defaults = $this->defaultValues;
+            $attributes = array_merge($defaults, $attributes);
+        }
+
+        return parent::fill($attributes);
+    }
 }

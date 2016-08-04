@@ -84,22 +84,38 @@ class Datamap
             'ships' => [
                 'name' => 'ships',
                 'display_name' => __('Schiffe'),
-                'gcid' => 'oc1dig3hpl8p2lvreqg4q25anc@group.calendar.google.com'
+                'color' => [
+                    'name' => 'blue',
+                    'hex' => '#4e97d9',
+                ],
+                'gcid' => 'oc1dig3hpl8p2lvreqg4q25anc@group.calendar.google.com',
             ],
             'fireworks' => [
                 'name' => 'fireworks',
                 'display_name' => __('Feuerwerke'),
-                'gcid' => '1lkh6r76dingfr1rnl1nctfjos@group.calendar.google.com'
+                'color' => [
+                    'name' => 'red',
+                    'hex' => '#e9595b',
+                ],
+                'gcid' => '1lkh6r76dingfr1rnl1nctfjos@group.calendar.google.com',
             ],
             'events' => [
                 'name' => 'events',
                 'display_name' => __('Veranstaltungen'),
-                'gcid' => '8cdmotrjirkl994kp066pcd93s@group.calendar.google.com'
+                'color' => [
+                    'name' => 'purple',
+                    'hex' => '#7c51d1',
+                ],
+                'gcid' => '8cdmotrjirkl994kp066pcd93s@group.calendar.google.com',
             ],
             'nature' => [
                 'name' => 'nature',
                 'display_name' => __('Naturphänomene'),
-                'gcid' => '1adrg0boc0sabgudl6e2ffpha8@group.calendar.google.com'
+                'color' => [
+                    'name' => 'green',
+                    'hex' => '#83b944',
+                ],
+                'gcid' => '1adrg0boc0sabgudl6e2ffpha8@group.calendar.google.com',
             ],
         ]);
     }

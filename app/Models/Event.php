@@ -25,6 +25,7 @@ class Event extends Model implements IdentifiableEvent
         'description',
         'google_calendar_id',
         'google_event_id',
+        'approved',
     ];
 
     public $appends = [
@@ -41,6 +42,26 @@ class Event extends Model implements IdentifiableEvent
         'starting_at',
         'ending_at',
     ];
+
+    protected $defaultValues = [
+        'timezone' => 'Europe/Berlin',
+    ];
+
+    public function getAlgoliaRecord()
+    {
+        return [
+            'id' => $this->getKey(),
+            'display_name' => $this->display_name,
+            'location' => $this->location,
+            '_geoloc' => $this->geoloc,
+            'description' => $this->description,
+        ];
+    }
+
+    public function indexOnly($index_name)
+    {
+        return (bool) $this->approved;
+    }
 
     public function attendees()
     {
@@ -152,10 +173,12 @@ class Event extends Model implements IdentifiableEvent
 
     public function createGoogleEvent()
     {
+        if($this->hasGoogleEvent()) {
+            return $this->updateGoogleEvent();
+        }
         $data = [];
-
         $data['name'] = $this->display_name;
-        if($this->all_day) {
+        if ($this->all_day) {
             $data['startDate'] = $this->starting_at;
             $data['start.timeZone'] = $this->timezone;
             $data['endDate'] = $this->ending_at;
@@ -166,10 +189,10 @@ class Event extends Model implements IdentifiableEvent
             $data['endDateTime'] = $this->ending_at;
             $data['end.timeZone'] = $this->timezone;
         }
-        if(!empty($this->location)) {
+        if (!empty($this->location)) {
             $data['location'] = $this->location;
         }
-        if(!empty($this->description)) {
+        if (!empty($this->description)) {
             $data['description'] = $this->description;
         }
         $data['anyoneCanAddSelf'] = true;
@@ -202,6 +225,7 @@ class Event extends Model implements IdentifiableEvent
             }
 
             $event->save();
+            return $event;
         }
     }
 
@@ -219,7 +243,13 @@ class Event extends Model implements IdentifiableEvent
         if($event->isGoogleEvent($gEvent)) {
             $event->display_name = $gEvent->name;
             $event->all_day = $gEvent->isAllDayEvent();
-            $event->timezone = $gEvent->start->getTimeZone();
+            $timezone = $gEvent->start->getTimeZone();
+            if(empty($timezone)) {
+                $timezone = $gEvent->end->getTimeZone();
+            }
+            if(!empty($timezone)) {
+                $event->timezone = $gEvent->start->getTimeZone();
+            }
             if ($event->all_day) {
                 $event->starting_at = $gEvent->startDate;
                 $event->ending_at = $gEvent->endDate;
@@ -237,10 +267,23 @@ class Event extends Model implements IdentifiableEvent
             }
             $event->google_event_id = $gEvent->id;
             $event->google_calendar_id = $gcid;
+            $event->approved = true;
 
             return $event->save();
         }
         return false;
+    }
+
+    public function approve()
+    {
+        $this->createGoogleEvent();
+        $this->update(['approved'=>true]);
+    }
+
+    public function delete()
+    {
+        $this->deleteGoogleEvent();
+        return parent::delete();
     }
 
     public function scopeByGcId(Builder $query, $gcid)
@@ -259,18 +302,29 @@ class Event extends Model implements IdentifiableEvent
         $query->where('google_event_id', $geid);
     }
 
-    public function scopeByStart(Builder $query, Carbon $date)
+    public function scopeByStart(Builder $query, Carbon $date = null)
     {
+        if(is_null($date)) {
+            $date = Carbon::yesterday('UTC')->startOfMonth();
+        }
         $query->where('starting_at', '>=', $date);
     }
 
-    public function scopeByEnd(Builder $query, Carbon $date)
+    public function scopeByEnd(Builder $query, Carbon $date = null)
     {
+        if(is_null($date)) {
+            $date = Carbon::now('UTC')->addYear()->endOfDay();
+        }
         $query->where('ending_at', '<=', $date);
     }
 
-    public function scopeByTimeFrame(Builder $query, Carbon $start, Carbon $end)
+    public function scopeByTimeFrame(Builder $query, Carbon $start = null, Carbon $end = null)
     {
         $query->byStart($start)->byEnd($end);
+    }
+
+    public function scopeByApproved(Builder $query, $approved = true)
+    {
+        $query->where('approved', $approved);
     }
 }

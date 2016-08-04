@@ -1,6 +1,84 @@
-.fc {
-  .fc-event {
-    border-radius: 0;
-    cursor: pointer;
+.calendar > .fc {
+  .fc-toolbar {
+    .fc-left {
+      h2 {
+
+      }
+    }
+
+    .fc-center {
+
+    }
+
+    .fc-right {
+      .fc-button-group {
+        .fc-button {
+          margin: 0;
+        }
+      }
+
+      .fc-button{
+        vertical-align: middle;
+        padding: 10px;
+        display: inline !important;
+        border-radius: 0;
+
+        &.fc-state-default{
+          background-image: none;
+          box-shadow: none;
+          text-shadow: none;
+          color: @text-color;
+          border: 0;
+          border-right: 1px solid rgba(0,0,0,0.1);
+        }
+
+        &.fc-corner-right{
+          border-right: 0;
+        }
+
+        &.fc-state-active, &.fc-state-hover{
+          background: @primary-color + 10%;
+          color: @light-color;
+          box-shadow: none;
+          text-shadow: none;
+        }
+
+        @media @phone{
+          padding: 5px;
+        }
+      }
+    }
+  }
+
+  .fc-view-container {
+    .fc-widget-content {
+      .fc-day {
+        &.fc-today {
+          background: fade(@brand-primary, 25%);
+        }
+      }
+
+      .fc-content-skeleton {
+        .fc-event-container {
+          .fc-event {
+            background: @primary-color;
+            border-color: darken(@primary-color, 8%);
+            color: @light-color;
+            border-radius: 0;
+            cursor: pointer;
+          }
+        }
+
+        .fc-border-separate {
+          .fc-today {
+            background-color: darken(@light-color, 3%);
+          }
+        }
+
+        .fc-cell-overlay {
+          background-color: fade(@primary-color, 50%);
+        }
+      }
+    }
   }
 }

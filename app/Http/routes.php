@@ -48,6 +48,8 @@ Route::group([
     Route::group(['prefix' => 'event'], function () {
         Route::get('/', 'EventController@getIndex')
             ->name('app.get.event.index');
+        Route::get('/{event}', 'EventController@getShow')
+            ->name('app.get.event.show');
     });
 
     Route::group([

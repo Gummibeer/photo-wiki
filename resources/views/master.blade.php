@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/whhg.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/nanoscroller.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/fullcalendar.min.css') }}"/>
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet" />
     @stack('head-styles')
 
@@ -51,6 +52,8 @@
     <script src="{{ asset('js/libs/bootstrap-tokenfield.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/clipboard.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/jquery.matchHeight.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/fullcalendar.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/fullcalendar.de.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('js/libs/ace/ace.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/ace/theme-monokai.js') }}" type="text/javascript"></script>

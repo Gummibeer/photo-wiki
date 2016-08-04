@@ -5,16 +5,46 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
     public function getIndex()
     {
-        $start = Carbon::yesterday('UTC')->startOfDay();
-        $end = Carbon::now('UTC')->addYear()->endOfDay();
+        $calendar = \Calendar::setOptions([
+            'firstDay' => 1,
+            'timeFormat' => 'H:mm',
+            'lang' => 'de',
+            'header' => [
+                'left' => 'title',
+                'center' => '',
+                'right' => 'month,agendaWeek,agendaDay, today, prev,next',
+            ],
+        ])
+            ->setCallbacks([
+                'eventClick' => "function(calEvent, jsEvent, view){ console.log(calEvent); calendar.fn.eventClick(calEvent, jsEvent, view); }",
+            ]);
 
-        $events = Event::byTimeFrame($start, $end)->get();
+        $calendars = \Datamap::getCalendars();
+        foreach($calendars as $config) {
+            $events = Event::byTimeFrame()->byGcId($config['gcid'])->byApproved()->get();
+            $calendar->addEvents($events, [
+                'color' => $config['color']['hex'],
+            ]);
+        }
 
-        dd($events->toArray());
+        return view('app.event.index')->with([
+            'calendar' => $calendar,
+            'calendars' => $calendars,
+        ]);
+    }
+
+    public function getShow(Request $request, Event $event)
+    {
+        if($request->ajax() || $request->wantsJson()) {
+            return $event;
+        }
+
+        abort(500);
     }
 }

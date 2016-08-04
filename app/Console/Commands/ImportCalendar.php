@@ -15,11 +15,12 @@ class ImportCalendar extends Command
     {
         $this->logCall();
 
-        $start = Carbon::yesterday('UTC')->startOfDay();
+        $start = Carbon::yesterday('UTC')->startOfMonth();
         $end = Carbon::now('UTC')->addYear()->endOfDay();
 
         $calendars = \Datamap::getCalendars()->pluck('gcid', 'name');
 
+        $eventIds = [];
         foreach($calendars as $name => $gcid) {
             $this->comment("fetch all events for [$name]($gcid)");
             $gEvents = GoogleEvent::get($start, $end, [], $gcid);
@@ -31,10 +32,16 @@ class ImportCalendar extends Command
                 $success = Event::importGoogleEvent($event, $gcid, $gEvent);
                 if($success) {
                     $this->info("imported event [$name]($geid)");
+                    $eventIds[] = $event->getKey();
                 } else {
                     $this->error("failed event [$name]($geid)");
                 }
             }
         }
+
+        $this->info('unapprove all not google events');
+        Event::whereNotIn('id', $eventIds)->update(['approved' => 0]);
+        $this->info('reindex algolia search');
+        Event::reindex();
     }
 }

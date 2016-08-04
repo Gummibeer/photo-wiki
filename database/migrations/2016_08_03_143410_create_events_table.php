@@ -18,6 +18,7 @@ class CreateEventsTable extends Migration
             $table->text('location')->nullable();
             $table->text('geoloc')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('approved')->default(false);
             $table->string('google_calendar_id')->nullable();
             $table->string('google_event_id')->nullable();
             $table->timestamps();
