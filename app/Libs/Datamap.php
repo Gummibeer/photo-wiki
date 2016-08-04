@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Libs;
 
 class Datamap
@@ -23,7 +24,7 @@ class Datamap
             [
                 'locale' => 'de-de',
                 'display_name' => __('Deutsch'),
-            ]
+            ],
         ]);
     }
 
@@ -65,13 +66,13 @@ class Datamap
         $warning = [];
         $error = [];
 
-        if(in_array($category, $info)) {
+        if (in_array($category, $info)) {
             return $this->getNotificationStyle('info');
-        } elseif(in_array($category, $success)) {
+        } elseif (in_array($category, $success)) {
             return $this->getNotificationStyle('success');
-        } elseif(in_array($category, $warning)) {
+        } elseif (in_array($category, $warning)) {
             return $this->getNotificationStyle('warning');
-        } elseif(in_array($category, $error)) {
+        } elseif (in_array($category, $error)) {
             return $this->getNotificationStyle('error');
         } else {
             return $this->getNotificationStyle('info');

@@ -14,7 +14,7 @@ class ModelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::created(function(User $user) {
+        User::created(function (User $user) {
             $user->allow('edit', $user);
         });
     }

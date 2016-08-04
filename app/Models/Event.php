@@ -109,18 +109,18 @@ class Event extends Model implements IdentifiableEvent
 
     public function getLatAttribute()
     {
-        if(is_array($this->geoloc)) {
+        if (is_array($this->geoloc)) {
             return array_get($this->geoloc, 'lat');
         }
     }
 
     public function getLngAttribute()
     {
-        if(is_array($this->geoloc)) {
+        if (is_array($this->geoloc)) {
             return array_get($this->geoloc, 'lng');
         }
     }
-    
+
     public function getCalendarAttribute()
     {
         return \Datamap::getCalendarById($this->google_calendar_id);
@@ -134,9 +134,9 @@ class Event extends Model implements IdentifiableEvent
 
     public function setStartingAtAttribute($value)
     {
-        if(is_string($value)) {
+        if (is_string($value)) {
             $carbon = Carbon::createFromFormat(trans('helpers.datetimeformat.php'), $value, $this->timezone);
-        } elseif($value instanceof Carbon) {
+        } elseif ($value instanceof Carbon) {
             $carbon = $value;
         } else {
             $carbon = Carbon::now();
@@ -152,9 +152,9 @@ class Event extends Model implements IdentifiableEvent
 
     public function setEndingAtAttribute($value)
     {
-        if(is_string($value)) {
+        if (is_string($value)) {
             $carbon = Carbon::createFromFormat(trans('helpers.datetimeformat.php'), $value, $this->timezone);
-        } elseif($value instanceof Carbon) {
+        } elseif ($value instanceof Carbon) {
             $carbon = $value;
         } else {
             $carbon = Carbon::now()->addHour();
@@ -170,24 +170,24 @@ class Event extends Model implements IdentifiableEvent
 
     public function hasGoogleEvent()
     {
-        return (!empty($this->google_calendar_id) && !empty($this->google_event_id));
+        return ! empty($this->google_calendar_id) && ! empty($this->google_event_id);
     }
 
     public function isGoogleEvent($event)
     {
-        return (!empty($event) && is_object($event) && is_a($event, GoogleEvent::class));
+        return ! empty($event) && is_object($event) && is_a($event, GoogleEvent::class);
     }
 
     public function getGoogleEvent()
     {
-        if($this->hasGoogleEvent()) {
+        if ($this->hasGoogleEvent()) {
             return GoogleEvent::find($this->google_event_id, $this->google_calendar_id);
         }
     }
 
     public function createGoogleEvent()
     {
-        if($this->hasGoogleEvent()) {
+        if ($this->hasGoogleEvent()) {
             return $this->updateGoogleEvent();
         }
         $data = [];
@@ -203,10 +203,10 @@ class Event extends Model implements IdentifiableEvent
             $data['endDateTime'] = $this->ending_at;
             $data['end.timeZone'] = $this->timezone;
         }
-        if (!empty($this->location)) {
+        if (! empty($this->location)) {
             $data['location'] = $this->location;
         }
-        if (!empty($this->description)) {
+        if (! empty($this->description)) {
             $data['description'] = $this->description;
         }
         $data['anyoneCanAddSelf'] = true;
@@ -215,6 +215,7 @@ class Event extends Model implements IdentifiableEvent
 
         $event = GoogleEvent::create($data, $this->google_calendar_id);
         $this->google_event_id = $event->id;
+
         return $event;
     }
 
@@ -222,7 +223,7 @@ class Event extends Model implements IdentifiableEvent
     {
         $event = $this->getGoogleEvent();
 
-        if($this->isGoogleEvent($event)) {
+        if ($this->isGoogleEvent($event)) {
             $event->name = $this->display_name;
             if ($this->all_day) {
                 $event->startDate = $this->starting_at;
@@ -231,14 +232,15 @@ class Event extends Model implements IdentifiableEvent
                 $event->startDateTime = $this->starting_at;
                 $event->endDateTime = $this->ending_at;
             }
-            if (!empty($this->location)) {
+            if (! empty($this->location)) {
                 $event->location = $this->location;
             }
-            if (!empty($this->description)) {
+            if (! empty($this->description)) {
                 $event->description = $this->description;
             }
 
             $event->save();
+
             return $event;
         }
     }
@@ -254,14 +256,14 @@ class Event extends Model implements IdentifiableEvent
 
     public static function importGoogleEvent(Event $event, $gcid, GoogleEvent $gEvent)
     {
-        if($event->isGoogleEvent($gEvent)) {
+        if ($event->isGoogleEvent($gEvent)) {
             $event->display_name = $gEvent->name;
             $event->all_day = $gEvent->isAllDayEvent();
             $timezone = $gEvent->start->getTimeZone();
-            if(empty($timezone)) {
+            if (empty($timezone)) {
                 $timezone = $gEvent->end->getTimeZone();
             }
-            if(!empty($timezone)) {
+            if (! empty($timezone)) {
                 $event->timezone = $gEvent->start->getTimeZone();
             }
             if ($event->all_day) {
@@ -272,39 +274,42 @@ class Event extends Model implements IdentifiableEvent
                 $event->ending_at = $gEvent->endDateTime;
             }
             $location = $gEvent->location;
-            if (!empty($location)) {
+            if (! empty($location)) {
                 $event->location = $location;
             }
             $description = $gEvent->description;
-            if (!empty($description)) {
+            if (! empty($description)) {
                 $event->description = $description;
             }
             $event->google_event_id = $gEvent->id;
             $event->google_calendar_id = $gcid;
             $event->approved = true;
 
-            return (bool)$event->save();
+            return (bool) $event->save();
         }
+
         return false;
     }
 
     public function reloadGoogleEvent()
     {
-        if($this->hasGoogleEvent()) {
-            return Event::importGoogleEvent($this, $this->google_calendar_id, $this->getGoogleEvent());
+        if ($this->hasGoogleEvent()) {
+            return self::importGoogleEvent($this, $this->google_calendar_id, $this->getGoogleEvent());
         }
+
         return false;
     }
 
     public function approve()
     {
         $this->createGoogleEvent();
-        $this->update(['approved'=>true]);
+        $this->update(['approved' => true]);
     }
 
     public function delete()
     {
         $this->deleteGoogleEvent();
+
         return parent::delete();
     }
 
@@ -326,10 +331,10 @@ class Event extends Model implements IdentifiableEvent
 
     public function scopeByStart(Builder $query, Carbon $date = null)
     {
-        if(is_null($date)) {
+        if (is_null($date)) {
             $date = Carbon::yesterday('UTC')->startOfMonth();
         }
-        $query->where(function($query) use ($date) {
+        $query->where(function ($query) use ($date) {
             $query->where('starting_at', '>=', $date)
                 ->orWhere(function ($query) use ($date) {
                     $query
@@ -341,7 +346,7 @@ class Event extends Model implements IdentifiableEvent
 
     public function scopeByEnd(Builder $query, Carbon $date = null)
     {
-        if(is_null($date)) {
+        if (is_null($date)) {
             $date = Carbon::now('UTC')->addYear()->endOfDay();
         }
         $query->where('ending_at', '<=', $date);

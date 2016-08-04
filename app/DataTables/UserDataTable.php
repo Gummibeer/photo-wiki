@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DataTables;
 
 use App\Models\User;
@@ -17,7 +18,7 @@ class UserDataTable extends DataTable
         return $this->datatables
             ->eloquent($this->query())
             ->addColumn('action', function (User $user) {
-                return '<div class="text-center"><a href="' . route('app.management.get.user.edit', $user->getKey()) . '" title="' . __('Bearbeiten') . '"><i class="icon wh-edit"></i></a></div>';
+                return '<div class="text-center"><a href="'.route('app.management.get.user.edit', $user->getKey()).'" title="'.__('Bearbeiten').'"><i class="icon wh-edit"></i></a></div>';
             })
             ->make(true);
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
@@ -12,7 +13,7 @@ class DashboardController extends Controller
         Event::setSettings();
 
         $events = Event::byApproved()->byStart(Carbon::now()->startOfDay())->orderBy('starting_at', 'asc')->limit(5)->get();
-        
+
         return view('app.dashboard.show')->with([
             'events' => $events,
         ]);

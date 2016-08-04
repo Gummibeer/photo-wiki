@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Management\User;
 
 use App\Http\Requests\Request;
@@ -10,7 +11,7 @@ class EditRequest extends Request
     {
         return \Auth::user()->can('edit', $this->route('user'));
     }
-    
+
     public function rules()
     {
         return [

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Libs;
 
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ class Helper
             $input = new ArgvInput();
             $command = array_get(\Artisan::all(), $input->getFirstArgument());
             $defaults['class'] = get_class($command);
-            if (!($command instanceof WorkCommand)) {
+            if (! ($command instanceof WorkCommand)) {
                 if (method_exists($command, 'getInput')) {
                     $defaults['options'] = $command->getInput()->getOptions();
                 }
@@ -48,7 +49,7 @@ class Helper
         foreach (explode('.', $key) as $segment) {
             if (is_object($object) && isset($object->{$segment})) {
                 $object = $object->{$segment};
-            } elseif (is_object($object) && method_exists($object, 'getAttribute') && !is_null($object->getAttribute($segment))) {
+            } elseif (is_object($object) && method_exists($object, 'getAttribute') && ! is_null($object->getAttribute($segment))) {
                 $object = $object->getAttribute($segment);
             } elseif (is_array($object) && array_key_exists($segment, $object)) {
                 $object = array_get($object, $segment, $default);
@@ -65,6 +66,7 @@ class Helper
         $trans = Translator::getInstance()->trans($message, [], null, getUserLanguage());
         $tmp = empty($trans) ? $message : $trans;
         $tmp = count($arguments) ? vsprintf($tmp, $arguments) : $tmp;
+
         return $tmp;
     }
 
@@ -85,25 +87,28 @@ class Helper
         } else {
             $arg = trim(route($arg, [], false), '/');
         }
+
         return call_user_func_array([app('request'), 'is'], [$arg]);
     }
 
     public function isJson($json)
     {
         json_decode($json);
-        return (json_last_error() == JSON_ERROR_NONE);
+
+        return json_last_error() == JSON_ERROR_NONE;
     }
 
     public function isActiveLdap()
     {
         $authProvider = \Auth::getProvider();
+
         return (bool) ($authProvider instanceof ActiveDirectoryAuthUserProvider);
     }
-    
+
     public function getStub($file)
     {
         $stubPath = app_path('Stubs/'.$file.'.stub');
-        if(file_exists($stubPath)) {
+        if (file_exists($stubPath)) {
             return file_get_contents($stubPath);
         }
     }
@@ -120,7 +125,8 @@ class Helper
         return nl2br($string);
     }
 
-    public function bashColorToHtml($string) {
+    public function bashColorToHtml($string)
+    {
         $colors = [
             '/\[0;30m(.*?)\[0m/s' => '<span class="black">$1</span>',
             '/\[0;31m(.*?)\[0m/s' => '<span class="red">$1</span>',
@@ -158,13 +164,13 @@ class Helper
         $response = $client->request('POST', '', [
             'body' => json_encode($data),
         ]);
-        if($response->getStatusCode() == 200) {
+        if ($response->getStatusCode() == 200) {
             $body = (string) $response->getBody();
-            if(is_json($body)) {
+            if (is_json($body)) {
                 $data = json_decode($body, true);
-                if(array_key_exists('hits', $data) && count($data['hits']) > 0) {
+                if (array_key_exists('hits', $data) && count($data['hits']) > 0) {
                     $hit = array_first($data['hits']);
-                    if(is_array($hit) && array_key_exists('_geoloc', $hit)) {
+                    if (is_array($hit) && array_key_exists('_geoloc', $hit)) {
                         return $hit['_geoloc'];
                     }
                 }

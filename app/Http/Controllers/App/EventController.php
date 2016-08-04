@@ -1,10 +1,9 @@
 <?php
-namespace App\Http\Controllers\App;
 
+namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -22,11 +21,11 @@ class EventController extends Controller
             ],
         ])
             ->setCallbacks([
-                'eventClick' => "function(calEvent, jsEvent, view){ console.log(calEvent); calendar.fn.eventClick(calEvent, jsEvent, view); }",
+                'eventClick' => 'function(calEvent, jsEvent, view){ console.log(calEvent); calendar.fn.eventClick(calEvent, jsEvent, view); }',
             ]);
 
         $calendars = \Datamap::getCalendars();
-        foreach($calendars as $config) {
+        foreach ($calendars as $config) {
             $events = Event::byTimeFrame()->byGcId($config['gcid'])->byApproved()->get();
             $calendar->addEvents($events, [
                 'color' => $config['color']['hex'],
@@ -41,7 +40,7 @@ class EventController extends Controller
 
     public function getShow(Request $request, Event $event)
     {
-        if($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return $event;
         }
 
@@ -49,10 +48,11 @@ class EventController extends Controller
             'event' => $event,
         ]);
     }
-    
+
     public function getReload(Request $request, Event $event)
     {
         $event->reloadGoogleEvent();
+
         return redirect()->back();
     }
 }

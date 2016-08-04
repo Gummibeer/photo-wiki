@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Traits\ModelHelperTrait;
@@ -29,10 +30,11 @@ class Model extends EloquentModel
 
     protected function cacheRemember($key, \Closure $callback)
     {
-        if (!is_null($value = $this->cacheGet($key))) {
+        if (! is_null($value = $this->cacheGet($key))) {
             return $value;
         }
         $this->cacheSet($key, $value = $callback());
+
         return $value;
     }
 
@@ -43,7 +45,7 @@ class Model extends EloquentModel
 
     public function fill(array $attributes)
     {
-        if(property_exists($this, 'defaultValues')) {
+        if (property_exists($this, 'defaultValues')) {
             $defaults = $this->defaultValues;
             $attributes = array_merge($defaults, $attributes);
         }
