@@ -5,3 +5,4 @@ Homestead.yaml
 Homestead.json
 .env
 /google_client_secret.json
+/_ide_helper.php

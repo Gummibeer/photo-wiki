@@ -51,8 +51,28 @@ class EventController extends Controller
 
     public function getReload(Request $request, Event $event)
     {
+        $this->authorize('edit', $event);
+
         $event->reloadGoogleEvent();
 
         return redirect()->back();
+    }
+
+    public function getCreate(Request $request)
+    {
+        return view('app.event.create')->with([
+            'event' => new Event(),
+            'calendars' => \Datamap::getCalendars()->pluck('display_name', 'name'),
+        ]);
+    }
+
+    public function getEdit(Request $request, Event $event)
+    {
+        $this->authorize('edit', $event);
+
+        return view('app.event.edit')->with([
+            'event' => $event,
+            'calendars' => \Datamap::getCalendars()->pluck('display_name', 'name'),
+        ]);
     }
 }

@@ -13,4 +13,6 @@ return [
     'starting_at' => __('Anfang'),
     'ending_at' => __('Ende'),
     'location' => __('Standort'),
+
+    'save' => __('speichern'),
 ];

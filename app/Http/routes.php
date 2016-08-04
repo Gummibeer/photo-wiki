@@ -48,8 +48,16 @@ Route::group([
     Route::group(['prefix' => 'event'], function () {
         Route::get('/', 'EventController@getIndex')
             ->name('app.get.event.index');
+        Route::get('/create', 'EventController@getCreate')
+            ->name('app.get.event.create');
+        Route::post('/create', 'EventController@postCreate')
+            ->name('app.post.event.create');
         Route::get('/{event}', 'EventController@getShow')
             ->name('app.get.event.show');
+        Route::get('/edit/{event}', 'EventController@getEdit')
+            ->name('app.get.event.edit');
+        Route::post('/edit/{event}', 'EventController@postEdit')
+            ->name('app.post.event.edit');
         Route::get('/reload/{event}', 'EventController@getReload')
             ->name('app.get.event.reload');
     });
