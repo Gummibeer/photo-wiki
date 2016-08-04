@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use App\Console\Command;
@@ -25,7 +26,7 @@ class ImportCalendar extends Command
             }
         } else {
             $geid = $this->option('geid');
-            if (!empty($geid)) {
+            if (! empty($geid)) {
                 $gcid = \Datamap::getCalendarByName($calendarName)['gcid'];
                 $gEvent = GoogleEvent::find($geid, $gcid);
                 $this->processEvent($gcid, $gEvent, true);

@@ -11,6 +11,6 @@ class UserPolicy
 
     public function manage(User $auth)
     {
-        return ($auth->can('create', User::class) || $auth->can('edit', User::class) || $auth->can('delete', User::class));
+        return $auth->can('create', User::class) || $auth->can('edit', User::class) || $auth->can('delete', User::class);
     }
 }

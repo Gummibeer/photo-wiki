@@ -12,7 +12,7 @@
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__ . '/../')
+    realpath(__DIR__.'/../')
 );
 
 /*
@@ -50,17 +50,16 @@ $app->singleton(
 $app->configureMonologUsing(function (Monolog\Logger $monolog) {
     function is_valid_log_driver(array $driver)
     {
-        return (
+        return
             array_get($driver, 'enabled', true) &&
             array_key_exists('handler', $driver) &&
             array_key_exists('args', $driver) &&
             class_exists($driver['handler']) &&
-            is_array($driver['args'])
-        );
+            is_array($driver['args']);
     }
 
     $drivers = config('monolog.drivers');
-    if (is_array($drivers) && !empty($drivers)) {
+    if (is_array($drivers) && ! empty($drivers)) {
         foreach ($drivers as $driver) {
             try {
                 if (is_valid_log_driver($driver)) {
@@ -86,6 +85,7 @@ $app->configureMonologUsing(function (Monolog\Logger $monolog) {
         } catch (Exception $e) {
             // ignore it
         }
+
         return $record;
     });
 });

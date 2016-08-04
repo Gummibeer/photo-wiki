@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\App\Management;
 
 use App\DataTables\UserDataTable;
@@ -25,13 +26,13 @@ class UserController extends Controller
 
         return view('app.management.user.edit')->with([
             'model' => $user,
-            'title' => __('Benutzer bearbeiten')
+            'title' => __('Benutzer bearbeiten'),
         ]);
     }
 
     public function putEdit(EditRequest $request, User $user)
     {
-        if($request->has('password')) {
+        if ($request->has('password')) {
             $user->setPassword($request->get('password'));
         }
 
@@ -41,6 +42,7 @@ class UserController extends Controller
         ]);
 
         \Alert::success(trans('alerts.save_success'))->flash();
+
         return redirect()->route('app.management.get.user.edit', $user->getKey());
     }
 }

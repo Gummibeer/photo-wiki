@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use App\Console\Command;
@@ -21,8 +22,8 @@ class CreateUser extends Command
         $data['password'] = bcrypt($this->secret('Password'));
 
         $user = User::create($data);
-        if(!is_null($user)) {
-            if($admin) {
+        if (! is_null($user)) {
+            if ($admin) {
                 $user->assign('admin');
             }
             $this->info('user created: #'.$user->getKey());

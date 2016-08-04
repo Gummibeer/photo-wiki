@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DataTables;
 
 use Yajra\Datatables\Services\DataTable as YajraDataTable;

@@ -57,26 +57,28 @@ class AuthController extends Controller
         } catch (TokenMismatchException $e) {
             return redirect($this->redirectIfVerificationFails());
         }
-        
+
         $user = User::byEmail($request->input('email'))->first();
         \Auth::login($user);
 
         \Alert::success(trans('alerts.verification_success'))->flash();
+
         return redirect($this->redirectAfterVerification());
     }
 
     public function getVerificationError()
     {
-        if(\Auth::check()) {
+        if (\Auth::check()) {
             \Auth::logout();
         }
         \Alert::danger(trans('alerts.verification_failed'))->flash();
+
         return $this->showLoginForm();
     }
-    
+
     protected function authenticated(Request $request, User $user)
     {
-        if($user->verified) {
+        if ($user->verified) {
             return redirect()->intended($this->redirectPath());
         }
 
@@ -99,6 +101,7 @@ class AuthController extends Controller
         \UserVerification::send($user, __('Photo-Wiki Bastätigungsemail'));
 
         \Alert::success(trans('alerts.verification_send'))->flash();
+
         return redirect($this->redirectPath());
     }
 }

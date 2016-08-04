@@ -15,7 +15,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifable, HasRolesAndAbilities;
-    
+
     const PASSWORD_MIN_LENGTH = 6;
 
     protected $table = 'users';
@@ -46,7 +46,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function avatar($size = 32)
     {
-        return 'https://gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=' . $size;
+        return 'https://gravatar.com/avatar/'.md5($this->email).'?d=mm&s='.$size;
     }
 
     public function getDisplayNameAttribute()
@@ -54,13 +54,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         if (empty($this->first_name) && empty($this->last_name)) {
             return $this->nickname;
         }
-        return (empty($this->first_name)) ? $this->last_name : $this->first_name . ' ' . $this->last_name;
+
+        return (empty($this->first_name)) ? $this->last_name : $this->first_name.' '.$this->last_name;
     }
-    
+
     public function setPassword($password)
     {
         $password = trim($password);
-        if(!empty($password) && strlen($password) >= self::PASSWORD_MIN_LENGTH) {
+        if (! empty($password) && strlen($password) >= self::PASSWORD_MIN_LENGTH) {
             $this->attributes['password'] = bcrypt($password);
         }
     }
