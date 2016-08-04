@@ -171,4 +171,14 @@ class Helper
             }
         }
     }
+
+    public function getLanguageFromLocale($locale)
+    {
+        return array_get(explode('-', $locale), 0);
+    }
+
+    public function formatCarbonDatetime(Carbon $carbon)
+    {
+        return $carbon->format(trans('helpers.datetimeformat.php'));
+    }
 }

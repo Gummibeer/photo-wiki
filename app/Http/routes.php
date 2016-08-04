@@ -50,6 +50,8 @@ Route::group([
             ->name('app.get.event.index');
         Route::get('/{event}', 'EventController@getShow')
             ->name('app.get.event.show');
+        Route::get('/reload/{event}', 'EventController@getReload')
+            ->name('app.get.event.reload');
     });
 
     Route::group([

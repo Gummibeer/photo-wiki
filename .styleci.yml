@@ -1,0 +1,13 @@
+preset: laravel
+
+risky: false
+
+linting: true
+
+finder:
+name:
+    - "*.php"
+  not-name:
+    - "*.blade.php"
+  path:
+    - "app"

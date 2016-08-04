@@ -45,6 +45,14 @@ class EventController extends Controller
             return $event;
         }
 
-        abort(500);
+        return view('app.event.show')->with([
+            'event' => $event,
+        ]);
+    }
+    
+    public function getReload(Request $request, Event $event)
+    {
+        $event->reloadGoogleEvent();
+        return redirect()->back();
     }
 }

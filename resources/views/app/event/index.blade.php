@@ -4,6 +4,15 @@
 @section('page-title', $title)
 
 @section('content')
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="autocomplete-events">{{ __('Kalender-Suche') }}</label>
+                <input type="search" id="autocomplete-events" class="form-control" />
+            </div>
+        </div>
+    </div>
+
     <div class="panel">
         <div class="panel-body calendar">
             {!! $calendar->calendar() !!}
@@ -41,19 +50,20 @@
                         </div>
                         <div class="col-md-12">
                             <strong class="list-group-item-heading">
-                                {{ trans('forms.description') }}
-                            </strong>
-                            <p class="event-description"></p>
-                        </div>
-                        <div class="col-md-12">
-                            <strong class="list-group-item-heading">
                                 {{ trans('forms.location') }}
                             </strong>
                             <p class="event-location"></p>
                         </div>
+                        <div class="col-md-12">
+                            <strong class="list-group-item-heading">
+                                {{ trans('forms.description') }}
+                            </strong>
+                            <p class="event-description"></p>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer clearfix">
+                    <a href="#" class="btn btn-default pull-left event-link" data-href="{{ route('app.get.event.show', '%id%') }}">{{ __('Detailseite') }}</a>
                     <button type="button" data-dismiss="modal" class="btn btn-default">{{ __('schließen') }}</button>
                 </div>
             </div>
@@ -66,14 +76,11 @@
         var calendar = {
             fn: {}
         };
-        calendar.fn.eventClick = function (calEvent, jsEvent, view) {
-            var eventId = calEvent.id;
-
+        calendar.fn.loadEventModal = function (eventId) {
             $.ajax({
                 method: 'GET',
                 url: APP_URL + '/event/' + eventId,
                 success: function (event) {
-                    console.log(event);
                     var start = moment(event.starting_at.date, 'YYYY-MM-DD HH:mm');
                     var end = moment(event.ending_at.date, 'YYYY-MM-DD HH:mm');
 
@@ -85,6 +92,7 @@
                     contents.end = $modal.find('.event-end');
                     contents.description = $modal.find('.event-description');
                     contents.location = $modal.find('.event-location');
+                    contents.link = $modal.find('.event-link');
 
                     $.each(contents, function() {
                         var $this = $(this);
@@ -112,15 +120,20 @@
                     if(event.location == null) {
                         contents.location.parent().hide();
                     }
+                    contents.link.attr('href', contents.link.data('href').replace('%id%', event.id));
 
                     $modal.find('.modal-header')
                             .css({background: event.calendar.color.hex});
                     $modal.find('.modal-title')
                             .css({color: '#ffffff'})
-                            .text(calEvent.title);
+                            .text(event.display_name);
                     $modal.modal('show');
                 }
             });
+        };
+        calendar.fn.eventClick = function (calEvent, jsEvent, view) {
+            var eventId = calEvent.id;
+            calendar.fn.loadEventModal(eventId);
             return false;
         };
     </script>

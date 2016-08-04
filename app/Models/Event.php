@@ -47,20 +47,34 @@ class Event extends Model implements IdentifiableEvent
         'timezone' => 'Europe/Berlin',
     ];
 
+    public $algoliaSettings = [
+        'attributesToIndex' => [
+            'id',
+            'display_name',
+            'calendar_name',
+            'location',
+            'description',
+            '_geoloc',
+        ],
+        'customRanking' => [
+        ],
+    ];
+
     public function getAlgoliaRecord()
     {
         return [
             'id' => $this->getKey(),
             'display_name' => $this->display_name,
+            'calendar_name' => $this->calendar['display_name'],
             'location' => $this->location,
-            '_geoloc' => $this->geoloc,
             'description' => $this->description,
+            '_geoloc' => $this->geoloc,
         ];
     }
 
     public function indexOnly($index_name)
     {
-        return (bool) $this->approved;
+        return (bool) ($this->approved && $this->ending_at->isFuture());
     }
 
     public function attendees()
@@ -269,7 +283,15 @@ class Event extends Model implements IdentifiableEvent
             $event->google_calendar_id = $gcid;
             $event->approved = true;
 
-            return $event->save();
+            return (bool)$event->save();
+        }
+        return false;
+    }
+
+    public function reloadGoogleEvent()
+    {
+        if($this->hasGoogleEvent()) {
+            return Event::importGoogleEvent($this, $this->google_calendar_id, $this->getGoogleEvent());
         }
         return false;
     }
@@ -307,7 +329,14 @@ class Event extends Model implements IdentifiableEvent
         if(is_null($date)) {
             $date = Carbon::yesterday('UTC')->startOfMonth();
         }
-        $query->where('starting_at', '>=', $date);
+        $query->where(function($query) use ($date) {
+            $query->where('starting_at', '>=', $date)
+                ->orWhere(function ($query) use ($date) {
+                    $query
+                        ->where('starting_at', '<=', $date)
+                        ->where('ending_at', '>=', $date);
+                });
+        });
     }
 
     public function scopeByEnd(Builder $query, Carbon $date = null)

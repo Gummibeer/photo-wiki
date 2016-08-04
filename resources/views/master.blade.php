@@ -35,6 +35,10 @@
     <![endif]-->
 </head>
 <body class="@yield('body-class')">
+    @if (view()->exists('google_analytics'))
+        @include('google_analytics')
+    @endif
+
     @yield('layout')
 
     <div id="modal-window"></div>
@@ -54,6 +58,10 @@
     <script src="{{ asset('js/libs/jquery.matchHeight.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/fullcalendar.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/fullcalendar.de.js') }}" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/gmaps.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/algoliasearchLite.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/autocomplete.jquery.min.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('js/libs/ace/ace.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/ace/theme-monokai.js') }}" type="text/javascript"></script>
@@ -63,10 +71,8 @@
     <script src="{{ asset('js/main.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/modules/masonry.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/modules/inputs.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/modules/submit.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/modules/modal.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/modules/project-member.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/modules/log-streams.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/modules/gmaps.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/modules/algolia.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/jquery.main.js') }}" type="text/javascript"></script>
 
     @stack('foot-scripts')
@@ -79,10 +85,8 @@
             App.init();
             App.masonry();
             App.inputs();
-            App.submit();
-            App.modal();
-            App.projectMember();
-            App.logStreams();
+            App.gmaps();
+            App.algolia();
         });
     </script>
 </body>

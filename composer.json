@@ -8,7 +8,6 @@
         "php": ">=5.6",
         "ext-mcrypt": "*",
         "ext-mbstring": "*",
-        "ext-ldap": "*",
         "ext-json": "*",
         "ext-dom": "*",
         "ext-curl": "*",

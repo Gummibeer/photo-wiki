@@ -1,0 +1,46 @@
+.algolia-autocomplete {
+  width: 100%;
+
+  .ad-dropdown-menu {
+    width: 100%;
+    color: black;
+    background-color: @color-white;
+    border: 1px solid @color-grey-300;
+    border-top: none;
+    border-radius: 5px;
+    padding: .5em;
+    box-shadow: 1px 1px 32px -10px rgba(0, 0, 0, 0.62);
+
+    .ad-header {
+      font-weight: bold;
+      padding: .5em 0;
+      margin-bottom: 1em;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .ad-suggestions {
+      .ad-suggestion {
+        cursor: pointer;
+        padding: 5px 4px;
+
+        &.ad-cursor {
+          background-color: fade(@brand-primary, 25%);
+        }
+
+        small {
+          font-size: .8em;
+          color: @color-grey-500;
+        }
+
+        em {
+          font-weight: bold;
+          font-style: normal;
+        }
+      }
+    }
+
+    .ap-footer {
+      text-align: right;
+    }
+  }
+}

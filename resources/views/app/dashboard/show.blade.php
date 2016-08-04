@@ -8,5 +8,8 @@
         <div class="col-md-3 col-xs-12 masonry-item masonry-sizer">
             @include('app.dashboard.widgets.welcome')
         </div>
+        <div class="col-md-3 col-xs-12 masonry-item masonry-sizer">
+            @include('app.dashboard.widgets.events')
+        </div>
     </div>
 @endsection

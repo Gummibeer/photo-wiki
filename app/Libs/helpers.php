@@ -47,3 +47,10 @@ if (!function_exists('get_stub')) {
         return \Helper::getStub($file);
     }
 }
+
+if (!function_exists('carbon_datetime')) {
+    function carbon_datetime(\Carbon\Carbon $carbon)
+    {
+        return \Helper::formatCarbonDatetime($carbon);
+    }
+}

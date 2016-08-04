@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Libs\BouncerSeeder;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \Bouncer::seeder(BouncerSeeder::class);
+        Carbon::setLocale(\Helper::getLanguageFromLocale(\App::getLocale()));
     }
 
     /**
