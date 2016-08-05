@@ -5,8 +5,6 @@ namespace App\Console\Commands;
 use App\Console\Command;
 use App\Models\Event;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Spatie\GoogleCalendar\Event as GoogleEvent;
 
 class ImportEvents extends Command
 {
@@ -16,9 +14,9 @@ class ImportEvents extends Command
     public function handle()
     {
         $this->logCall();
-        
-        foreach(get_class_methods($this) as $method) {
-            if(starts_with($method, 'import')) {
+
+        foreach (get_class_methods($this) as $method) {
+            if (starts_with($method, 'import')) {
                 $this->$method();
             }
         }
@@ -31,16 +29,16 @@ class ImportEvents extends Command
         $url = 'http://www.hamburgcruisecenter.eu/de/estimated-ships';
         $html = new \Htmldom($url);
         $rows = $html->find('#content table.views-table tr');
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             $event = new Event();
             $event->google_calendar_id = \Datamap::getCalendarByName('ships')['gcid'];
             $match = false;
-            foreach($row->childNodes() as $cell) {
+            foreach ($row->childNodes() as $cell) {
                 $match = $this->hamburgcruisecenter_processTableCell($event, $cell) ? true : $match;
             }
-            if($match) {
+            if ($match) {
                 $exists = Event::checkForExistence($event);
-                if(!$exists) {
+                if (! $exists) {
                     $event->save();
                     $this->info('created event #'.$event->getKey().' - '.$event->display_name);
                 }
@@ -50,22 +48,26 @@ class ImportEvents extends Command
 
     protected function hamburgcruisecenter_processTableCell(Event $event, $cell)
     {
-        if($cell->tag == 'td') {
-            if(str_contains($cell->class, 'views-field-field-shipname')) {
+        if ($cell->tag == 'td') {
+            if (str_contains($cell->class, 'views-field-field-shipname')) {
                 $event->display_name = trim($cell->plaintext);
                 $event->description = 'http://www.hamburgcruisecenter.eu'.$cell->children(0)->href;
+
                 return true;
             }
-            if(str_contains($cell->class, 'views-field-field-terminal')) {
+            if (str_contains($cell->class, 'views-field-field-terminal')) {
                 $event->location = $this->hamburgcruisecenter_getLocationByTerminal($cell->plaintext);
+
                 return true;
             }
-            if(str_contains($cell->class, 'views-field-field-arrival-departure-1')) {
+            if (str_contains($cell->class, 'views-field-field-arrival-departure-1')) {
                 $event->ending_at = $this->hamburgcruisecenter_getCarbonByDate($cell->children(0));
+
                 return true;
             }
-            if(str_contains($cell->class, 'views-field-field-arrival-departure')) {
+            if (str_contains($cell->class, 'views-field-field-arrival-departure')) {
                 $event->starting_at = $this->hamburgcruisecenter_getCarbonByDate($cell->children(0));
+
                 return true;
             }
         }
@@ -96,6 +98,7 @@ class ImportEvents extends Command
         $time = explode(':', $parts[4]);
         $hour = intval($time[0]);
         $minute = intval($time[1]);
+
         return Carbon::create($year, $month, $day, $hour, $minute, 0, $timezone);
     }
 

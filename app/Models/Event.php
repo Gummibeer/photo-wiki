@@ -308,7 +308,7 @@ class Event extends Model implements IdentifiableEvent
         $this->createGoogleEvent();
         $this->approved = true;
         $this->save();
-        $event = Event::find($this->getKey());
+        $event = self::find($this->getKey());
         $event->update([
             'starting_at' => $startingAt,
             'ending_at' => $endingAt,
@@ -376,10 +376,10 @@ class Event extends Model implements IdentifiableEvent
     {
         $query->where('display_name', $name);
     }
-    
+
     public static function checkForExistence(Event $event)
     {
-        return Event::query()
+        return self::query()
             ->byGcId($event->google_calendar_id)
             ->byName($event->display_name)
             ->byTimeFrame($event->starting_at, $event->ending_at)

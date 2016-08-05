@@ -26,6 +26,7 @@ class ModelServiceProvider extends ServiceProvider
         Event::saving(function (Event $event) {
             $event->starting_at->setTimezone('UTC');
             $event->ending_at->setTimezone('UTC');
+
             return true;
         });
     }
