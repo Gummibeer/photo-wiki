@@ -4,8 +4,6 @@ namespace App\Console\Commands;
 
 use App\Console\Command;
 use App\Models\Event;
-use Carbon\Carbon;
-use Spatie\GoogleCalendar\Event as GoogleEvent;
 
 class ReindexCalendar extends Command
 {
