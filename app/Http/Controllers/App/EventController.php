@@ -120,31 +120,35 @@ class EventController extends Controller
 
     public function getJoin(Request $request, Event $event)
     {
-        if(\Auth::check()) {
+        if (\Auth::check()) {
             $user = \Auth::user();
-            if(!$event->isAttendee($user)) {
+            if (! $event->isAttendee($user)) {
                 $event->attendees()->attach($user->getKey());
                 \Alert::success(trans('alerts.event_joined'))->flash();
+
                 return redirect()->route('app.get.event.show', $event->getKey());
             }
         }
 
         \Alert::danger(trans('alerts.save_failed'))->flash();
+
         return redirect()->route('app.get.event.show', $event->getKey());
     }
 
     public function getLeave(Request $request, Event $event)
     {
-        if(\Auth::check()) {
+        if (\Auth::check()) {
             $user = \Auth::user();
-            if($event->isAttendee($user)) {
+            if ($event->isAttendee($user)) {
                 $event->attendees()->detach($user->getKey());
                 \Alert::success(trans('alerts.event_left'))->flash();
+
                 return redirect()->route('app.get.event.show', $event->getKey());
             }
         }
 
         \Alert::danger(trans('alerts.save_failed'))->flash();
+
         return redirect()->route('app.get.event.show', $event->getKey());
     }
 }
