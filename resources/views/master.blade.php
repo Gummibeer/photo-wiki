@@ -19,15 +19,18 @@
     <script type="application/javascript">
         var BASE_URL = "{{ url('/') }}";
         var APP_URL = "{{ url('app') }}";
-        var DATEPICKER_OPTIONS = {
+        var DATEPICKER_DEFAULT_OPTIONS = {
             weekStart: {{ trans('helpers.weekstart') }},
-            format: "{{ trans('helpers.dateformat.js') }}",
             cancelText: "{{ __('schließen') }}",
             okText: "{{ __('ok') }}",
             clearText: "{{ __('zurücksetzen') }}",
             nowText: "{{ __('jetzt') }}",
             lang: "{{ getUserLanguage() }}"
         };
+        var DATEPICKER_OPTIONS = DATEPICKER_DEFAULT_OPTIONS;
+        DATEPICKER_OPTIONS.format = "{{ trans('helpers.dateformat.js') }}";
+        var DATETIMEPICKER_OPTIONS = DATEPICKER_DEFAULT_OPTIONS;
+        DATETIMEPICKER_OPTIONS.format = "{{ trans('helpers.datetimeformat.js') }}";
     </script>
     <!--[if lt IE 9]>
         <script src="{{ asset('js/libs/html5shiv.min.js') }}"></script>
@@ -35,9 +38,7 @@
     <![endif]-->
 </head>
 <body class="@yield('body-class')">
-    @if (view()->exists('google_analytics'))
-        @include('google_analytics')
-    @endif
+    @include('google_analytics')
 
     @yield('layout')
 
@@ -62,6 +63,7 @@
     <script src="{{ asset('js/libs/gmaps.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/algoliasearchLite.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/autocomplete.jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/libs/algolia-places.min.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('js/libs/ace/ace.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/libs/ace/theme-monokai.js') }}" type="text/javascript"></script>

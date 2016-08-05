@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\App\Event\CreateRequest;
+use App\Http\Requests\App\Event\EditRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
@@ -58,12 +60,38 @@ class EventController extends Controller
         return redirect()->back();
     }
 
+    public function getApprove(Request $request, Event $event)
+    {
+        $this->authorize('approve', $event);
+
+        $event->approve();
+
+        return redirect()->back();
+    }
+
     public function getCreate(Request $request)
     {
         return view('app.event.create')->with([
             'event' => new Event(),
             'calendars' => \Datamap::getCalendars()->pluck('display_name', 'name'),
         ]);
+    }
+
+    public function postCreate(CreateRequest $request)
+    {
+        $data = array_filter($request->only(Event::getFillableFields()), function($value) {
+            return !is_null($value);
+        });
+        $data['google_calendar_id'] = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
+
+        $event = Event::create($data);
+        if(\Auth::check() && \Auth::user()->can('approve', Event::class)) {
+            $event->approve();
+        }
+
+        Event::find($event->getKey())->update(['starting_at' => $data['starting_at']]);
+
+        return redirect()->route('app.get.event.show', $event->getKey());
     }
 
     public function getEdit(Request $request, Event $event)
@@ -74,5 +102,19 @@ class EventController extends Controller
             'event' => $event,
             'calendars' => \Datamap::getCalendars()->pluck('display_name', 'name'),
         ]);
+    }
+
+    public function postEdit(EditRequest $request, Event $event)
+    {
+        $this->authorize('edit', $event);
+        
+        $data = array_filter($request->only(Event::getFillableFields()), function($value) {
+            return !is_null($value);
+        });
+        $data['google_calendar_id'] = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
+
+        $event->update($data);
+
+        return redirect()->route('app.get.event.show', $event->getKey());
     }
 }

@@ -47,21 +47,33 @@
                         {{ __('Dashboard') }}
                     </a>
                 </li>
-                @can('manage', \App\Models\User::class)
+                @if(\Auth::check() && (
+                    \Auth::user()->can('manage', \App\Models\User::class) ||
+                    \Auth::user()->can('manage', \App\Models\Event::class)
+                ))
                     <li class="dropdown">
                         <a class="dropdown-toggle" aria-expanded="false" role="button" data-toggle="dropdown" href="#">
                             {{ __('Verwaltung') }}
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+                            @can('manage', \App\Models\User::class)
                             <li>
                                 <a href="{{ route('app.management.get.user.index') }}">
                                     {{ __('Benutzer') }}
                                 </a>
                             </li>
+                            @endcan
+                            @can('manage', \App\Models\Event::class)
+                            <li>
+                                <a href="{{ route('app.management.get.event.index') }}">
+                                    {{ __('Termine') }}
+                                </a>
+                            </li>
+                            @endcan
                         </ul>
                     </li>
-                @endcan
+                @endif
             </ul>
 
             @if(\Auth::check())

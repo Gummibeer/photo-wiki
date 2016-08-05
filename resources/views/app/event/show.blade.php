@@ -5,7 +5,21 @@
 
 @section('page-actions')
     @can('edit', $event)
-        <a href="{{ route('app.get.event.reload', $event->getKey()) }}" class="btn btn-warning">{{ __('von Google aktualisieren') }}</a>
+        @if($event->hasGoogleEvent())
+            <a href="{{ route('app.get.event.reload', $event->getKey()) }}" class="btn btn-warning">
+                {{ __('von Google aktualisieren') }}
+            </a>
+        @endif
+        <a href="{{ route('app.get.event.edit', $event->getKey()) }}" class="btn btn-warning">
+            {{ __('bearbeiten') }}
+        </a>
+    @endcan
+    @can('approve', $event)
+        @if(!$event->approved)
+            <a href="{{ route('app.get.event.approve', $event->getKey()) }}" class="btn btn-success">
+                {{ __('bestätigen') }}
+            </a>
+        @endif
     @endcan
 @endsection
 
@@ -72,9 +86,11 @@
             <a href="https://www.google.de/maps/place/{{ urlencode($event->location) }}" class="btn btn-default" target="_blank">
                 {{ __('Google Maps') }}
             </a>
+            @if($event->hasGoogleEvent())
             <a href="{{ $event->getGoogleEvent()->htmlLink }}" class="btn btn-default" target="_blank">
                 {{ __('Google Kalender') }}
             </a>
+            @endif
         </div>
     </div>
 </div>

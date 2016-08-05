@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('head-title', $title = __('Benutzer'))
-@section('page-title', __('Benutzer-Verwaltung'))
+@section('head-title', $title = __('Termine'))
+@section('page-title', __('Termin-Verwaltung'))
 
 @section('content')
     <div class="panel">

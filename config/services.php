@@ -18,4 +18,8 @@ return [
         'key' => env('GOOGLE_MAPS_KEY'),
     ],
 
+    'google_analytics' => [
+        'code' => env('GOOGLE_ANALYTICS_CODE'),
+    ],
+
 ];

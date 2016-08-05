@@ -18,7 +18,12 @@ class UserDataTable extends DataTable
         return $this->datatables
             ->eloquent($this->query())
             ->addColumn('action', function (User $user) {
-                return '<div class="text-center"><a href="'.route('app.management.get.user.edit', $user->getKey()).'" title="'.__('Bearbeiten').'"><i class="icon wh-edit"></i></a></div>';
+                $actions = '<div class="text-center">';
+                if(\Auth::user()->can('edit', $user)) {
+                    $actions .= '<a href = "'.route('app.management.get.user.edit', $user->getKey()).'" title = "'.__('Bearbeiten').'" ><i class="icon wh-edit" ></i ></a>';
+                }
+                $actions .= '</div>';
+                return $actions;
             })
             ->make(true);
     }

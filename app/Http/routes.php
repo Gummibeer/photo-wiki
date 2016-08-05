@@ -9,6 +9,8 @@ Route::get('/app', function () {
 Route::get('/auth', function () {
     return redirect()->route('auth.get.login');
 });
+Route::get('/sitemap', 'SiteMapController@getIndex')
+    ->name('sitemap');
 
 /* AUTH */
 Route::group([
@@ -56,10 +58,12 @@ Route::group([
             ->name('app.get.event.show');
         Route::get('/edit/{event}', 'EventController@getEdit')
             ->name('app.get.event.edit');
-        Route::post('/edit/{event}', 'EventController@postEdit')
+        Route::put('/edit/{event}', 'EventController@postEdit')
             ->name('app.post.event.edit');
         Route::get('/reload/{event}', 'EventController@getReload')
             ->name('app.get.event.reload');
+        Route::get('/approve/{event}', 'EventController@getApprove')
+            ->name('app.get.event.approve');
     });
 
     Route::group([
@@ -73,6 +77,15 @@ Route::group([
                 ->name('app.management.get.user.edit');
             Route::put('/{user}', 'UserController@putEdit')
                 ->name('app.management.put.user.edit');
+        });
+
+        Route::group(['prefix' => 'event'], function () {
+            Route::get('/', 'EventController@getIndex')
+                ->name('app.management.get.event.index');
+            Route::get('/approve/{event}', 'EventController@getApprove')
+                ->name('app.management.get.event.approve');
+            Route::get('/delete/{event}', 'EventController@getDelete')
+                ->name('app.management.get.event.delete');
         });
     });
 });

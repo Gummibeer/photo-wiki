@@ -118,6 +118,15 @@ class Datamap
                 ],
                 'gcid' => '1adrg0boc0sabgudl6e2ffpha8@group.calendar.google.com',
             ],
+            'default' => [
+                'name' => 'default',
+                'display_name' => __('Sonstige'),
+                'color' => [
+                    'name' => 'grey',
+                    'hex' => '#757575',
+                ],
+                'gcid' => '55ctsb2758si9pq11hctonuv48@group.calendar.google.com',
+            ],
         ]);
     }
 

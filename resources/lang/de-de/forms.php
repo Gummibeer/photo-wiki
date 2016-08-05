@@ -13,6 +13,7 @@ return [
     'starting_at' => __('Anfang'),
     'ending_at' => __('Ende'),
     'location' => __('Standort'),
+    'all_day' => __('Ganztägig'),
 
     'save' => __('speichern'),
 ];

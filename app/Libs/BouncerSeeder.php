@@ -19,10 +19,13 @@ class BouncerSeeder
         Bouncer::allow('user-admin')->to('delete', User::class);
 
         Bouncer::allow('admin')->to('edit', Event::class);
+        Bouncer::allow('admin')->to('approve', Event::class);
         Bouncer::allow('admin')->to('delete', Event::class);
         Bouncer::allow('admin')->to('debug', Event::class);
         Bouncer::allow('event-mod')->to('edit', Event::class);
+        Bouncer::allow('event-mod')->to('approve', Event::class);
         Bouncer::allow('event-admin')->to('edit', Event::class);
+        Bouncer::allow('event-admin')->to('approve', Event::class);
         Bouncer::allow('event-admin')->to('delete', Event::class);
     }
 }

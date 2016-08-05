@@ -9,6 +9,7 @@ return [
     ],
     'datetimeformat' => [
         'php' => 'd.m.Y H:i',
+        'js' => 'DD.MM.YYYY HH:mm',
     ],
     'datetimetzformat' => [
         'php' => 'd.m.Y H:i T',

@@ -26,7 +26,8 @@
         "anhskohbo/no-captcha": "2.*",
         "jrean/laravel-user-verification": "^2.0",
         "algolia/algoliasearch-laravel": "^1.2",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "roumen/sitemap": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

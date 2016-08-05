@@ -3,6 +3,12 @@
 @section('head-title', $title = __('Kalender'))
 @section('page-title', $title)
 
+@section('page-actions')
+    <a href="{{ route('app.get.event.create') }}" class="btn btn-default">
+        {{ __('Termin erstellen') }}
+    </a>
+@endsection
+
 @section('content')
     <div class="panel panel-default">
         <div class="panel-body">

@@ -128,8 +128,10 @@ class Event extends Model implements IdentifiableEvent
 
     public function getStartingAtAttribute($value)
     {
-        return $this->asDateTime($value)
-            ->setTimezone($this->timezone);
+        if(!empty($value)) {
+            return $this->asDateTime($value)
+                ->setTimezone($this->timezone);
+        }
     }
 
     public function setStartingAtAttribute($value)
@@ -139,15 +141,17 @@ class Event extends Model implements IdentifiableEvent
         } elseif ($value instanceof Carbon) {
             $carbon = $value;
         } else {
-            $carbon = Carbon::now();
+            $carbon = $this->asDateTime($this->getOriginal('starting_at', Carbon::now()));
         }
         $this->attributes['starting_at'] = $carbon->setTimezone('UTC');
     }
 
     public function getEndingAtAttribute($value)
     {
-        return $this->asDateTime($value)
-            ->setTimezone($this->timezone);
+        if(!empty($value)) {
+            return $this->asDateTime($value)
+                ->setTimezone($this->timezone);
+        }
     }
 
     public function setEndingAtAttribute($value)
@@ -157,7 +161,7 @@ class Event extends Model implements IdentifiableEvent
         } elseif ($value instanceof Carbon) {
             $carbon = $value;
         } else {
-            $carbon = Carbon::now()->addHour();
+            $carbon = $this->asDateTime($this->getOriginal('ending_at', Carbon::now()->addHour()));
         }
         $this->attributes['ending_at'] = $carbon->setTimezone('UTC');
     }
@@ -194,14 +198,10 @@ class Event extends Model implements IdentifiableEvent
         $data['name'] = $this->display_name;
         if ($this->all_day) {
             $data['startDate'] = $this->starting_at;
-            $data['start.timeZone'] = $this->timezone;
             $data['endDate'] = $this->ending_at;
-            $data['end.timeZone'] = $this->timezone;
         } else {
             $data['startDateTime'] = $this->starting_at;
-            $data['start.timeZone'] = $this->timezone;
             $data['endDateTime'] = $this->ending_at;
-            $data['end.timeZone'] = $this->timezone;
         }
         if (! empty($this->location)) {
             $data['location'] = $this->location;
@@ -250,7 +250,11 @@ class Event extends Model implements IdentifiableEvent
         $event = $this->getGoogleEvent();
 
         if ($this->isGoogleEvent($event)) {
-            $event->delete();
+            try {
+                $event->delete();
+            } catch(\Exception $e) {
+                \Log::warning($e);
+            }
         }
     }
 
@@ -303,7 +307,8 @@ class Event extends Model implements IdentifiableEvent
     public function approve()
     {
         $this->createGoogleEvent();
-        $this->update(['approved' => true]);
+        $this->approved = true;
+        $this->save();
     }
 
     public function delete()

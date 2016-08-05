@@ -183,8 +183,16 @@ class Helper
         return array_get(explode('-', $locale), 0);
     }
 
-    public function formatCarbonDatetime(Carbon $carbon)
+    public function formatCarbonDatetime($carbon)
     {
-        return $carbon->format(trans('helpers.datetimeformat.php'));
+        if($carbon instanceof Carbon) {
+            return $carbon->format(trans('helpers.datetimeformat.php'));
+        }
+    }
+
+    public function isDateFormat($format, $value)
+    {
+        $parsed = date_parse_from_format($format, $value);
+        return (bool) $parsed['error_count'] === 0 && $parsed['warning_count'] === 0;
     }
 }

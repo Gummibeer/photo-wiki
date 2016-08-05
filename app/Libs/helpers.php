@@ -50,8 +50,15 @@ if (! function_exists('get_stub')) {
 }
 
 if (! function_exists('carbon_datetime')) {
-    function carbon_datetime(\Carbon\Carbon $carbon)
+    function carbon_datetime($carbon)
     {
         return \Helper::formatCarbonDatetime($carbon);
+    }
+}
+
+if (! function_exists('is_date_Format')) {
+    function is_date_Format($format, $value)
+    {
+        return \Helper::isDateFormat($format, $value);
     }
 }

@@ -6,7 +6,18 @@ var App = (function () {
             jQuery('input.datepicker')
                 .bootstrapMaterialDatePicker(
                     jQuery.extend(DATEPICKER_OPTIONS, {
+                        date: true,
                         time: false
+                    })
+                );
+        }
+
+        function datetimepicker() {
+            jQuery('input.datetimepicker')
+                .bootstrapMaterialDatePicker(
+                    jQuery.extend(DATEPICKER_OPTIONS, {
+                        date: true,
+                        time: true
                     })
                 );
         }
@@ -163,13 +174,28 @@ var App = (function () {
             }
         }
 
+        function placesearch() {
+            var $placeSearches = jQuery('input.place-search');
+            if($placeSearches.length > 0) {
+                $placeSearches.each(function(i) {
+                    var $placeSearch = jQuery(this);
+                    $placeSearch.attr('id', 'place-search-'+i);
+                    places({
+                        container: document.querySelector('#'+$placeSearch.attr('id'))
+                    });
+                });
+            }
+        }
+
         datepicker();
+        datetimepicker();
         tokenfield();
         clipboard();
         hideable();
         generatePass();
         writable();
         codeEditor();
+        placesearch();
 
     };
     return App;
