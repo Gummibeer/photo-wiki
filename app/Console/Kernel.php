@@ -2,9 +2,12 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ApproveEvents;
+use App\Console\Commands\ClearEvents;
 use App\Console\Commands\CompileViews;
 use App\Console\Commands\CreateUser;
 use App\Console\Commands\ImportCalendar;
+use App\Console\Commands\ImportEvents;
 use App\Console\Commands\ReindexCalendar;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -21,6 +24,9 @@ class Kernel extends ConsoleKernel
         CreateUser::class,
         ImportCalendar::class,
         ReindexCalendar::class,
+        ImportEvents::class,
+        ClearEvents::class,
+        ApproveEvents::class,
     ];
 
     /**
@@ -35,5 +41,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('bouncer:seed')->everyTenMinutes();
         $schedule->command('calendar:import')->hourly();
         $schedule->command('calendar:reindex')->monthly();
+//        $schedule->command('events:import')->monthly();
     }
 }

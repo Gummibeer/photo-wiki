@@ -181,6 +181,7 @@ return [
         Jrean\UserVerification\UserVerificationServiceProvider::class,
         AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
         Roumen\Sitemap\SitemapServiceProvider::class,
+        Yangqi\Htmldom\HtmldomServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -192,6 +193,7 @@ return [
         App\Providers\DebugServiceProvider::class,
         App\Providers\BladeServiceProvider::class,
         App\Providers\LibsServiceProvider::class,
+        App\Providers\ModelServiceProvider::class,
 
     ],
 
@@ -251,6 +253,7 @@ return [
         'Datatables' => Yajra\Datatables\Datatables::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
+        'Htmldom' => Yangqi\Htmldom\Htmldom::class,
 
         'Helper' => App\Facades\HelperFacade::class,
         'Datamap' => App\Facades\DatamapFacade::class,

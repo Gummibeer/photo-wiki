@@ -23,6 +23,11 @@ class ModelServiceProvider extends ServiceProvider
                 $event->updateGoogleEvent();
             }
         });
+        Event::saving(function (Event $event) {
+            $event->starting_at->setTimezone('UTC');
+            $event->ending_at->setTimezone('UTC');
+            return true;
+        });
     }
 
     /**

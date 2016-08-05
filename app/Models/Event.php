@@ -38,11 +38,6 @@ class Event extends Model implements IdentifiableEvent
         'geoloc' => 'array',
     ];
 
-    protected $dates = [
-        'starting_at',
-        'ending_at',
-    ];
-
     protected $defaultValues = [
         'timezone' => 'Europe/Berlin',
     ];
@@ -308,9 +303,16 @@ class Event extends Model implements IdentifiableEvent
 
     public function approve()
     {
+        $startingAt = $this->starting_at;
+        $endingAt = $this->ending_at;
         $this->createGoogleEvent();
         $this->approved = true;
         $this->save();
+        $event = Event::find($this->getKey());
+        $event->update([
+            'starting_at' => $startingAt,
+            'ending_at' => $endingAt,
+        ]);
     }
 
     public function delete()
@@ -341,6 +343,7 @@ class Event extends Model implements IdentifiableEvent
         if (is_null($date)) {
             $date = Carbon::yesterday('UTC')->startOfMonth();
         }
+        $date = $date->setTimezone('UTC');
         $query->where(function ($query) use ($date) {
             $query->where('starting_at', '>=', $date)
                 ->orWhere(function ($query) use ($date) {
@@ -367,5 +370,19 @@ class Event extends Model implements IdentifiableEvent
     public function scopeByApproved(Builder $query, $approved = true)
     {
         $query->where('approved', $approved);
+    }
+
+    public function scopeByName(Builder $query, $name)
+    {
+        $query->where('display_name', $name);
+    }
+    
+    public static function checkForExistence(Event $event)
+    {
+        return Event::query()
+            ->byGcId($event->google_calendar_id)
+            ->byName($event->display_name)
+            ->byTimeFrame($event->starting_at, $event->ending_at)
+            ->exists();
     }
 }

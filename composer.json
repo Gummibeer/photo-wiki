@@ -27,7 +27,8 @@
         "jrean/laravel-user-verification": "^2.0",
         "algolia/algoliasearch-laravel": "^1.2",
         "guzzlehttp/guzzle": "~6.0",
-        "roumen/sitemap": "^2.6"
+        "roumen/sitemap": "^2.6",
+        "yangqi/htmldom": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
