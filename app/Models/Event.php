@@ -128,7 +128,7 @@ class Event extends Model implements IdentifiableEvent
 
     public function getStartingAtAttribute($value)
     {
-        if(!empty($value)) {
+        if (! empty($value)) {
             return $this->asDateTime($value)
                 ->setTimezone($this->timezone);
         }
@@ -148,7 +148,7 @@ class Event extends Model implements IdentifiableEvent
 
     public function getEndingAtAttribute($value)
     {
-        if(!empty($value)) {
+        if (! empty($value)) {
             return $this->asDateTime($value)
                 ->setTimezone($this->timezone);
         }
@@ -252,7 +252,7 @@ class Event extends Model implements IdentifiableEvent
         if ($this->isGoogleEvent($event)) {
             try {
                 $event->delete();
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 \Log::warning($e);
             }
         }

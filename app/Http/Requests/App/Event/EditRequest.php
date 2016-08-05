@@ -24,11 +24,11 @@ class EditRequest extends Request
             ],
             'starting_at' => [
                 'required',
-                'date_format:' . trans('helpers.datetimeformat.php'),
+                'date_format:'.trans('helpers.datetimeformat.php'),
             ],
             'ending_at' => [
                 'required',
-                'date_format:' . trans('helpers.datetimeformat.php'),
+                'date_format:'.trans('helpers.datetimeformat.php'),
                 'after:starting_at',
             ],
             'all_day' => [
