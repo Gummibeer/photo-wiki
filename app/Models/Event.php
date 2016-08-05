@@ -68,6 +68,8 @@ class Event extends Model implements IdentifiableEvent
             'calendar_name' => $this->calendar['display_name'],
             'location' => $this->location,
             'description' => $this->description,
+            'starting_at' => $this->starting_at,
+            'ending_at' => $this->ending_at,
             '_geoloc' => $this->geoloc,
         ];
     }

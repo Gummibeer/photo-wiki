@@ -65,12 +65,6 @@ class ImportCalendar extends Command
         }
     }
 
-    protected function reindex()
-    {
-        $this->info('reindex algolia search');
-        Event::reindex();
-    }
-
     protected function getStart()
     {
         return Carbon::yesterday('UTC')->startOfMonth();

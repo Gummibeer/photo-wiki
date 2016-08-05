@@ -17,8 +17,20 @@ var App = (function () {
                     suggestion: function(suggestion) {
                         var template =  '<div class="ad-suggestion"><div>';
                         template += suggestion._highlightResult.display_name.value;
-                        if(suggestion._highlightResult.location != undefined) {
-                            template += '<br /><small>' + suggestion._highlightResult.location.value + '</small>';
+                        if(suggestion._highlightResult.location != undefined || suggestion._highlightResult.calendar_name != undefined) {
+                            var details = [];
+                            var start = moment(suggestion.starting_at.date, 'YYYY-MM-DD HH:mm').format('DD.MM.YYYY HH:mm');
+                            var end = moment(suggestion.ending_at.date, 'YYYY-MM-DD HH:mm').format('DD.MM.YYYY HH:mm');
+                            details.push(start + ' - ' + end);
+                            if(suggestion._highlightResult.location != undefined) {
+                                details.push(suggestion._highlightResult.location.value);
+                            }
+                            if(suggestion._highlightResult.calendar_name != undefined) {
+                                details.push(suggestion._highlightResult.calendar_name.value);
+                            }
+                            template += '<br /><small>';
+                            template += details.join(' | ');
+                            template += '</small>';
                         }
                         template += '</div></div>';
                         return template;
