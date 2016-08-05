@@ -118,6 +118,24 @@ class Datamap
                 ],
                 'gcid' => '1adrg0boc0sabgudl6e2ffpha8@group.calendar.google.com',
             ],
+            'tours' => [
+                'name' => 'tours',
+                'display_name' => __('Fototouren'),
+                'color' => [
+                    'name' => 'yellow',
+                    'hex' => '#fbc02d',
+                ],
+                'gcid' => 'rubc3fvlhp226ju0jogjl6bhs8@group.calendar.google.com',
+            ],
+            'workshops' => [
+                'name' => 'workshops',
+                'display_name' => __('Workshops'),
+                'color' => [
+                    'name' => 'pink',
+                    'hex' => '#e53b75',
+                ],
+                'gcid' => 'f986g59kbo6ccmdgggdk3pqk6s@group.calendar.google.com',
+            ],
             'default' => [
                 'name' => 'default',
                 'display_name' => __('Sonstige'),

@@ -8,6 +8,19 @@
                     <span>{{ __('Kalender') }}</span>
                 </a>
             </li>
+
+            <li>
+                <a href="https://facebook.com/Photo-Wiki-1215946231803146/" class="text-center social-facebook">
+                    <i class="icon wh-circlefacebook"></i>
+                    <span>{{ __('Facebook') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/Gummibeer/photo-wiki" class="text-center social-github">
+                    <i class="icon wh-circlegithub"></i>
+                    <span>{{ __('Github') }}</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

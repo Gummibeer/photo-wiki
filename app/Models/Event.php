@@ -385,4 +385,14 @@ class Event extends Model implements IdentifiableEvent
             ->byTimeFrame($event->starting_at, $event->ending_at)
             ->exists();
     }
+
+    public function isAttendee($user)
+    {
+        $userId = $user;
+        if($user instanceof User) {
+            $userId = $user->getKey();
+        }
+
+        return $this->attendees()->where('id', $userId)->exists();
+    }
 }

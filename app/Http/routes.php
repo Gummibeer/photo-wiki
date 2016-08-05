@@ -64,6 +64,10 @@ Route::group([
             ->name('app.get.event.reload');
         Route::get('/approve/{event}', 'EventController@getApprove')
             ->name('app.get.event.approve');
+        Route::get('/join/{event}', 'EventController@getJoin')
+            ->name('app.get.event.join');
+        Route::get('/leave/{event}', 'EventController@getLeave')
+            ->name('app.get.event.leave');
     });
 
     Route::group([

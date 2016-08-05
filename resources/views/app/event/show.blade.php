@@ -82,6 +82,19 @@
         </div>
     </div>
     <div class="panel-footer clearfix padding-top-15">
+        <div class="btn-group pull-left">
+            @if(\Auth::check())
+                @if($event->isAttendee(\Auth::user()))
+                    <a href="{{ route('app.get.event.leave', $event->getKey()) }}" class="btn btn-default">
+                        {{ __('absagen') }}
+                    </a>
+                @else
+                    <a href="{{ route('app.get.event.join', $event->getKey()) }}" class="btn btn-default">
+                        {{ __('teilnehmen') }}
+                    </a>
+                @endif
+            @endif
+        </div>
         <div class="btn-group pull-right">
             <a href="https://www.google.de/maps/place/{{ urlencode($event->location) }}" class="btn btn-default" target="_blank">
                 {{ __('Google Maps') }}
@@ -94,6 +107,23 @@
         </div>
     </div>
 </div>
+
+@if($event->attendees->count() > 0)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ __('Teilnehmer') }}</h3>
+        </div>
+        <div class="panel-body">
+            <ul class="list-inline">
+            @foreach($event->attendees->sortBy('display_name') as $attendee)
+                <li>
+                    <span class="label label-info">{{ $attendee->display_name }}</span>
+                </li>
+            @endforeach
+            </ul>
+        </div>
+    </div>
+@endif
 
 @if(!empty($event->geoloc))
     <div class="panel panel-default">

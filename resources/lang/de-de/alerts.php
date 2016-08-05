@@ -11,4 +11,6 @@ return [
     'delete_failed' => __('Löschen fehlgeschlagen!'),
     'job_dispatched' => __('Die Aufgabe wurde geplant und wird gleich ausgeführt. Dieser Vorgang dauert ein paar Minuten.'),
     'dispatch_failed' => __('Es ist ein Fehler aufgetreten und die Aufgabe konnte nicht geplant werden.'),
+    'event_joined' => __('Du nimmst jetzt an dem Event teil, viel Spaß!'),
+    'event_left' => __('Du nimmst nicht mehr an dem Event teil.'),
 ];

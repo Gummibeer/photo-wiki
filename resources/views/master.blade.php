@@ -7,6 +7,13 @@
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}">
 
     <title>@yield('head-title') | {{ config('app.name') }}</title>
+    @define $description = __('Dein Anlaufpunkt für Termine die in keinem Fotografen-Kalender fehlen dürfen und noch vieles mehr.')
+    <meta name="description" content="{{ $description }}"/>
+
+    <meta property="og:title" content="@yield('head-title') | {{ config('app.name') }}"/>
+    <meta property="og:description" content="{{ $description }}"/>
+    <meta property="og:url" content="{{ Request::url() }}"/>
+    <meta property="og:image" content="{{ asset('img/brand/logo/banner-ograph.min.png') }}"/>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('css/whhg.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/nanoscroller.min.css') }}"/>
