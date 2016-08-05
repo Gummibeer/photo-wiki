@@ -20,26 +20,26 @@ class EventDataTable extends DataTable
             ->eloquent($this->query())
             ->addColumn('action', function (Event $event) {
                 $actions = '<div class="text-center"><ul class="list-inline margin-0">';
-                if(\Auth::user()->can('approve', $event) && !$event->approved) {
+                if (\Auth::user()->can('approve', $event) && ! $event->approved) {
                     $actions .= '<li><a href = "'.route('app.management.get.event.approve', $event->getKey()).'" title = "'.__('bestätigen').'"><i class="icon wh-check text-success"></i></a></li>';
                 }
-                if(\Auth::user()->can('delete', $event)) {
+                if (\Auth::user()->can('delete', $event)) {
                     $actions .= '<li><a href = "'.route('app.management.get.event.delete', $event->getKey()).'" title = "'.__('löschen').'"><i class="icon wh-trash text-danger"></i></a></li>';
                 }
                 $actions .= '</ul></div>';
 
                 return $actions;
             })
-            ->editColumn('starting_at', function($row) {
+            ->editColumn('starting_at', function ($row) {
                 return carbon_datetime($row['starting_at']);
             })
-            ->editColumn('ending_at', function($row) {
+            ->editColumn('ending_at', function ($row) {
                 return carbon_datetime($row['ending_at']);
             })
-            ->editColumn('all_day', function($row) {
+            ->editColumn('all_day', function ($row) {
                 return $row['all_day'] ? '<i class="icon wh-ok text-success"></i>' : '<i class="icon wh-remove text-danger"></i>';
             })
-            ->editColumn('approved', function($row) {
+            ->editColumn('approved', function ($row) {
                 return $row['approved'] ? '<i class="icon wh-ok text-success"></i>' : '<i class="icon wh-remove text-danger"></i>';
             })
             ->make(true);

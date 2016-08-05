@@ -19,7 +19,7 @@ class ModelServiceProvider extends ServiceProvider
             $user->allow('edit', $user);
         });
         Event::updated(function (Event $event) {
-            if($event->hasGoogleEvent()) {
+            if ($event->hasGoogleEvent()) {
                 $event->updateGoogleEvent();
             }
         });

@@ -185,7 +185,7 @@ class Helper
 
     public function formatCarbonDatetime($carbon)
     {
-        if($carbon instanceof Carbon) {
+        if ($carbon instanceof Carbon) {
             return $carbon->format(trans('helpers.datetimeformat.php'));
         }
     }
@@ -193,6 +193,7 @@ class Helper
     public function isDateFormat($format, $value)
     {
         $parsed = date_parse_from_format($format, $value);
+
         return (bool) $parsed['error_count'] === 0 && $parsed['warning_count'] === 0;
     }
 }

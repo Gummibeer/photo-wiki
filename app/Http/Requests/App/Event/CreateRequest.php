@@ -25,12 +25,12 @@ class CreateRequest extends Request
             ],
             'starting_at' => [
                 'required',
-                'date_format:' . trans('helpers.datetimeformat.php'),
-                'after:' . Carbon::now()->startOfDay(),
+                'date_format:'.trans('helpers.datetimeformat.php'),
+                'after:'.Carbon::now()->startOfDay(),
             ],
             'ending_at' => [
                 'required',
-                'date_format:' . trans('helpers.datetimeformat.php'),
+                'date_format:'.trans('helpers.datetimeformat.php'),
                 'after:starting_at',
             ],
             'all_day' => [
@@ -38,12 +38,13 @@ class CreateRequest extends Request
                 'boolean',
             ],
         ];
-        if(\Auth::guest()) {
+        if (\Auth::guest()) {
             $rules['g-recaptcha-response'] = [
                 'required',
                 'captcha',
             ];
         }
+
         return $rules;
     }
 }

@@ -79,13 +79,13 @@ class EventController extends Controller
 
     public function postCreate(CreateRequest $request)
     {
-        $data = array_filter($request->only(Event::getFillableFields()), function($value) {
-            return !is_null($value);
+        $data = array_filter($request->only(Event::getFillableFields()), function ($value) {
+            return ! is_null($value);
         });
         $data['google_calendar_id'] = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
 
         $event = Event::create($data);
-        if(\Auth::check() && \Auth::user()->can('approve', Event::class)) {
+        if (\Auth::check() && \Auth::user()->can('approve', Event::class)) {
             $event->approve();
         }
 
@@ -107,9 +107,9 @@ class EventController extends Controller
     public function postEdit(EditRequest $request, Event $event)
     {
         $this->authorize('edit', $event);
-        
-        $data = array_filter($request->only(Event::getFillableFields()), function($value) {
-            return !is_null($value);
+
+        $data = array_filter($request->only(Event::getFillableFields()), function ($value) {
+            return ! is_null($value);
         });
         $data['google_calendar_id'] = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
 
