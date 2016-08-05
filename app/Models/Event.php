@@ -389,7 +389,7 @@ class Event extends Model implements IdentifiableEvent
     public function isAttendee($user)
     {
         $userId = $user;
-        if($user instanceof User) {
+        if ($user instanceof User) {
             $userId = $user->getKey();
         }
 
