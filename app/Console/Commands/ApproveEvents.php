@@ -4,9 +4,6 @@ namespace App\Console\Commands;
 
 use App\Console\Command;
 use App\Models\Event;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Spatie\GoogleCalendar\Event as GoogleEvent;
 
 class ApproveEvents extends Command
 {
@@ -17,9 +14,9 @@ class ApproveEvents extends Command
     {
         $this->logCall();
         $events = Event::byApproved(0)->get();
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $event->approve();
-            $this->info('approved event #'.$event->getKey() . ' - ' . $event->display_name);
+            $this->info('approved event #'.$event->getKey().' - '.$event->display_name);
         }
     }
 }

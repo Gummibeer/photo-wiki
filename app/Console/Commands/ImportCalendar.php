@@ -18,7 +18,7 @@ class ImportCalendar extends Command
 
         $calendarName = $this->argument('calendar');
 
-        $force = (bool)$this->option('force');
+        $force = (bool) $this->option('force');
 
         if (is_null($calendarName)) {
             $calendars = \Datamap::getCalendars()->pluck('gcid', 'name');
@@ -56,7 +56,7 @@ class ImportCalendar extends Command
         $this->comment("process event [$name]($geid)");
         $event = Event::byGcId($gcid)->byGeId($geid)->first();
         if (is_null($event) || $force) {
-            if(is_null($event)) {
+            if (is_null($event)) {
                 $event = new Event();
             }
             $success = Event::importGoogleEvent($event, $gcid, $gEvent);
