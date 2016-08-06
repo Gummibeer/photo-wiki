@@ -14,9 +14,10 @@ class PageController extends Controller
 
         $title = Str::studly($page);
         $file = $page.'.md';
-        if(\Storage::disk('pages')->exists($file)) {
+        if (\Storage::disk('pages')->exists($file)) {
             $content = \Storage::disk('pages')->get($file);
             $html = MarkdownExtra::defaultTransform($content);
+
             return view('app.page')->with([
                 'title' => $title,
                 'content' => $html,
