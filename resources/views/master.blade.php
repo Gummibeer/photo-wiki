@@ -12,12 +12,11 @@
 
     <meta property="og:title" content="@yield('head-title') | {{ config('app.name') }}"/>
     <meta property="og:description" content="{{ $description }}"/>
-    <meta property="og:url" content="{{ Request::url() }}"/>
+    <meta property="og:url" content="{{ Request::fullUrl() }}"/>
     <meta property="og:image" content="{{ asset('img/brand/logo/banner-ograph.min.png') }}"/>
     @if(!empty(config('services.facebook.app_id')))
     <meta property="fb:app_id" content="{{ config('services.facebook.app_id') }}"/>
     @endif
-    <meta property="fb:admins" content="1034141129950001"/>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('css/whhg.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/nanoscroller.min.css') }}"/>

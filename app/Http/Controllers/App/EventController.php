@@ -13,10 +13,18 @@ class EventController extends Controller
 {
     public function getIndex(Request $request)
     {
+        $title = __('Kalender');
         if($request->has('date')) {
             $default = Carbon::createFromFormat('Y-m-d', $request->get('date'));
         } else {
             $default = Carbon::now();
+        }
+        if($request->has('calendar')) {
+            $calendar = \Datamap::getCalendarByName($request->get('calendar'));
+            $calendars[] = $calendar;
+            $title = $calendar['display_name'] .' | ' . $title;
+        } else {
+            $calendars = \Datamap::getCalendars();
         }
 
         $calendar = \Calendar::setOptions([
@@ -34,7 +42,6 @@ class EventController extends Controller
                 'eventAfterAllRender' => 'function(view){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); }'
             ]);
 
-        $calendars = \Datamap::getCalendars();
         foreach ($calendars as $config) {
             $events = Event::byTimeFrame()->byGcId($config['gcid'])->byApproved()->get();
             $calendar->addEvents($events, [
@@ -45,6 +52,7 @@ class EventController extends Controller
         return view('app.event.index')->with([
             'calendar' => $calendar,
             'calendars' => $calendars,
+            'title' => $title,
         ]);
     }
 

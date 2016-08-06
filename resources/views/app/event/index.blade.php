@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('head-title', $title = __('Kalender'))
+@section('head-title', $title)
 @section('page-title', $title)
 
 @section('page-actions')
