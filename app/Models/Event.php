@@ -166,7 +166,11 @@ class Event extends Model implements IdentifiableEvent
     public function setLocationAttribute($value)
     {
         $this->attributes['location'] = $value;
-        $this->attributes['geoloc'] = json_encode(\Helper::getGeolocByAddress($value));
+        if(!empty($value)) {
+            $this->attributes['geoloc'] = json_encode(\Helper::getGeolocByAddress($value));
+        } else {
+            $this->attributes['geoloc'] = '';
+        }
     }
 
     public function hasGoogleEvent()
@@ -367,6 +371,25 @@ class Event extends Model implements IdentifiableEvent
         $query->byStart($start)->byEnd($end);
     }
 
+    public function scopeByUpcoming(Builder $query)
+    {
+        $end = Carbon::now('UTC')->startOfDay();
+        $query
+            ->where('ending_at', '>=', $end);
+    }
+
+    public function scopeByRunningAt(Builder $query, Carbon $day = null)
+    {
+        if(is_null($day)) {
+            $day = Carbon::now('UTC');
+        }
+        $start = $day->copy()->endOfDay();
+        $end = $day->copy()->startOfDay();
+        $query
+            ->where('starting_at', '<=', $start)
+            ->where('ending_at', '>=', $end);
+    }
+
     public function scopeByApproved(Builder $query, $approved = true)
     {
         $query->where('approved', $approved);
@@ -375,6 +398,15 @@ class Event extends Model implements IdentifiableEvent
     public function scopeByName(Builder $query, $name)
     {
         $query->where('display_name', $name);
+    }
+
+    public function scopeByGeoLoc(Builder $query, $geoloc)
+    {
+        if($geoloc == 'has') {
+            $query->where('geoloc', '<>', '')->whereNotNull('geoloc');
+        } elseif(is_array($geoloc) && array_key_exists('lat', $geoloc) && array_key_exists('lng', $geoloc)) {
+            $query->where('geoloc', json_encode(['lat' => $geoloc['lat'], 'lng' => $geoloc['lng']]));
+        }
     }
 
     public static function checkForExistence(Event $event)

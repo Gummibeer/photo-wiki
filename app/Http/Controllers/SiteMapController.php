@@ -26,6 +26,8 @@ class SiteMapController extends Controller
             foreach (Event::byApproved()->get() as $event) {
                 $sitemap->add(route('app.get.event.show', $event->getKey()), $event->updated_at->format('c'), '1.0', 'daily');
             }
+
+            $sitemap->add(route('page', 'impressum'), Carbon::now()->format('c'), '0.1', 'daily');
         }
 
         return $sitemap->render('xml');

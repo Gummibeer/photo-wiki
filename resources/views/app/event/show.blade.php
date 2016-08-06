@@ -24,10 +24,11 @@
 @endsection
 
 @section('content')
-<div class="panel panel-default">
+<div class="panel panel-default" itemscope itemtype="http://schema.org/Event">
+    <meta itemprop="url" content="{{ route('app.get.event.show', $event->getKey()) }}" />
     <div class="panel-heading">
         <h3 class="panel-title">
-            {{ __('Stammdaten') }}
+            <span itemprop="name">{{ $event->display_name }}</span>
             <span class="label pull-right" style="background: {{ $event->calendar['color']['hex'] }};">
                 {{ $event->calendar['display_name'] }}
             </span>
@@ -39,21 +40,28 @@
                 <strong class="list-group-item-heading">
                     {{ trans('forms.starting_at') }}
                 </strong>
-                <p>{{ carbon_datetime($event->starting_at) }}</p>
+                <p>
+                    <meta itemprop="startDate" content="{{ $event->starting_at->toIso8601String() }}" />
+                    {{ carbon_datetime($event->starting_at) }}
+                </p>
             </div>
             <div class="col-md-6">
                 <strong class="list-group-item-heading">
                     {{ trans('forms.ending_at') }}
                 </strong>
-                <p>{{ carbon_datetime($event->ending_at) }}</p>
+                <p>
+                    <meta itemprop="endDate" content="{{ $event->ending_at->toIso8601String() }}" />
+                    {{ carbon_datetime($event->ending_at) }}
+                </p>
             </div>
             @if(!empty($event->location))
             <div class="col-md-12">
                 <strong class="list-group-item-heading">
                     {{ trans('forms.location') }}
                 </strong>
-                <p class="clearfix">
-                    {{ $event->location }}
+                <p class="clearfix" itemprop="location" itemscope itemtype="http://schema.org/PostalAddress">
+                    <span itemprop="name">{{ $event->location }}</span>
+                    <meta itemprop="address" content="{{ $event->location }}" />
                 </p>
             </div>
             @endif
@@ -62,7 +70,7 @@
                 <strong class="list-group-item-heading">
                     {{ trans('forms.description') }}
                 </strong>
-                <p>{{ $event->description }}</p>
+                <p itemprop="description">{!! nl2br(htmlentities($event->description)) !!}</p>
             </div>
             @endif
             @can('debug', $event)
@@ -105,8 +113,18 @@
             </a>
             @endif
         </div>
+        <div class="btn-group pull-right margin-right-15">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ Request::url() }}" class="btn btn-default social-facebook" target="_blank">
+                <i class="wh-facebook"></i>
+            </a>
+        </div>
     </div>
 </div>
+
+@include('partials.disqus', [
+    'url' => route('app.get.event.show', $event->getKey()),
+    'slug' => 'event-'.$event->getKey(),
+])
 
 @if($event->attendees->count() > 0)
     <div class="panel panel-default">
@@ -130,7 +148,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">{{ __('Karte') }}</h3>
         </div>
-        <div class="gmap height-500" data-lat="{{ $event->lat }}" data-lng="{{ $event->lng }}" data-name="{{ $event->display_name }}" data-location="{{ $event->location }}"></div>
+        <div class="gmap-single height-500" data-lat="{{ $event->lat }}" data-lng="{{ $event->lng }}" data-name="{{ $event->display_name }}" data-location="{{ $event->location }}"></div>
     </div>
 @endif
 @endsection

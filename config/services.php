@@ -22,4 +22,8 @@ return [
         'code' => env('GOOGLE_ANALYTICS_CODE'),
     ],
 
+    'facebook' => [
+        'app_id' => env('FACEBOOK_APP_ID'),
+    ],
+
 ];

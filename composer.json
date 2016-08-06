@@ -28,7 +28,8 @@
         "algolia/algoliasearch-laravel": "^1.2",
         "guzzlehttp/guzzle": "~6.0",
         "roumen/sitemap": "^2.6",
-        "yangqi/htmldom": "dev-master"
+        "yangqi/htmldom": "dev-master",
+        "michelf/php-markdown": "^1.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

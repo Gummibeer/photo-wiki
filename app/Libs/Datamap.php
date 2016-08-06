@@ -118,6 +118,15 @@ class Datamap
                 ],
                 'gcid' => '1adrg0boc0sabgudl6e2ffpha8@group.calendar.google.com',
             ],
+            'sport' => [
+                'name' => 'sport',
+                'display_name' => __('Sport'),
+                'color' => [
+                    'name' => 'cyan',
+                    'hex' => '#47b8c6',
+                ],
+                'gcid' => 'vk6rld3s35vipld18b2mc02mgg@group.calendar.google.com',
+            ],
             'tours' => [
                 'name' => 'tours',
                 'display_name' => __('Fototouren'),

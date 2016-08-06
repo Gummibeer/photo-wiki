@@ -11,6 +11,8 @@ Route::get('/auth', function () {
 });
 Route::get('/sitemap', 'SiteMapController@getIndex')
     ->name('sitemap');
+Route::get('/page/{page}', 'PageController@getShow')
+    ->name('page');
 
 /* AUTH */
 Route::group([
@@ -68,6 +70,11 @@ Route::group([
             ->name('app.get.event.join');
         Route::get('/leave/{event}', 'EventController@getLeave')
             ->name('app.get.event.leave');
+    });
+
+    Route::group(['prefix' => 'map'], function () {
+        Route::get('/', 'MapController@getIndex')
+            ->name('app.get.map.index');
     });
 
     Route::group([
