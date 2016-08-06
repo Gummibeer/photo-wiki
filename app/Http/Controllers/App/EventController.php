@@ -14,15 +14,15 @@ class EventController extends Controller
     public function getIndex(Request $request)
     {
         $title = __('Kalender');
-        if($request->has('date')) {
+        if ($request->has('date')) {
             $default = Carbon::createFromFormat('Y-m-d', $request->get('date'));
         } else {
             $default = Carbon::now();
         }
-        if($request->has('calendar')) {
+        if ($request->has('calendar')) {
             $calendar = \Datamap::getCalendarByName($request->get('calendar'));
             $calendars[] = $calendar;
-            $title = $calendar['display_name'] .' | ' . $title;
+            $title = $calendar['display_name'].' | '.$title;
         } else {
             $calendars = \Datamap::getCalendars();
         }
@@ -39,7 +39,7 @@ class EventController extends Controller
         ])
             ->setCallbacks([
                 'eventClick' => 'function(calEvent, jsEvent, view){ calendar.fn.eventClick(calEvent, jsEvent, view); }',
-                'eventAfterAllRender' => 'function(view){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); }'
+                'eventAfterAllRender' => 'function(view){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); }',
             ]);
 
         foreach ($calendars as $config) {
@@ -129,7 +129,7 @@ class EventController extends Controller
         });
         $oldGcId = $event->google_calendar_id;
         $newGcId = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
-        if($oldGcId != $newGcId) {
+        if ($oldGcId != $newGcId) {
             $event->deleteGoogleEvent();
             $event->google_calendar_id = $newGcId;
             $event->createGoogleEvent();
