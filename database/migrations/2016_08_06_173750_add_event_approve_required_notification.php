@@ -1,7 +1,6 @@
 <?php
 
 use Fenos\Notifynder\Models\NotificationCategory;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddEventApproveRequiredNotification extends Migration

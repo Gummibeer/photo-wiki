@@ -166,7 +166,7 @@ class Event extends Model implements IdentifiableEvent
     public function setLocationAttribute($value)
     {
         $this->attributes['location'] = $value;
-        if(!empty($value)) {
+        if (! empty($value)) {
             $this->attributes['geoloc'] = json_encode(\Helper::getGeolocByAddress($value));
         } else {
             $this->attributes['geoloc'] = '';
@@ -388,7 +388,7 @@ class Event extends Model implements IdentifiableEvent
 
     public function scopeByRunningAt(Builder $query, Carbon $day = null)
     {
-        if(is_null($day)) {
+        if (is_null($day)) {
             $day = Carbon::now('UTC');
         }
         $start = $day->copy()->endOfDay();
@@ -410,9 +410,9 @@ class Event extends Model implements IdentifiableEvent
 
     public function scopeByGeoLoc(Builder $query, $geoloc)
     {
-        if($geoloc == 'has') {
+        if ($geoloc == 'has') {
             $query->where('geoloc', '<>', '')->whereNotNull('geoloc');
-        } elseif(is_array($geoloc) && array_key_exists('lat', $geoloc) && array_key_exists('lng', $geoloc)) {
+        } elseif (is_array($geoloc) && array_key_exists('lat', $geoloc) && array_key_exists('lng', $geoloc)) {
             $query->where('geoloc', json_encode(['lat' => $geoloc['lat'], 'lng' => $geoloc['lng']]));
         }
     }
