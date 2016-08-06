@@ -25,7 +25,7 @@ class ModelServiceProvider extends ServiceProvider
             }
         });
         Event::saving(function (Event $event) {
-            if($event->isAllDay()) {
+            if ($event->isAllDay()) {
                 $event->starting_at->startOfDay();
                 $event->ending_at->endOfDay();
             }
@@ -36,7 +36,7 @@ class ModelServiceProvider extends ServiceProvider
             return true;
         });
         Event::created(function (Event $event) {
-            if(!$event->approved && (\Auth::guest() || (\Auth::check() && !\Auth::user()->can('approve', $event)))) {
+            if (! $event->approved && (\Auth::guest() || (\Auth::check() && ! \Auth::user()->can('approve', $event)))) {
                 $users = User::whereCan('approve', $event)->get();
                 \Notifynder::loop($users, function (Builder $builder, User $user) use ($event) {
                     $builder
