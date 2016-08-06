@@ -6,12 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\App\Event\CreateRequest;
 use App\Http\Requests\App\Event\EditRequest;
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    public function getIndex()
+    public function getIndex(Request $request)
     {
+        if($request->has('date')) {
+            $default = Carbon::createFromFormat('Y-m-d', $request->get('date'));
+        } else {
+            $default = Carbon::now();
+        }
+
         $calendar = \Calendar::setOptions([
             'firstDay' => 1,
             'timeFormat' => 'H:mm',
@@ -23,7 +30,8 @@ class EventController extends Controller
             ],
         ])
             ->setCallbacks([
-                'eventClick' => 'function(calEvent, jsEvent, view){ console.log(calEvent); calendar.fn.eventClick(calEvent, jsEvent, view); }',
+                'eventClick' => 'function(calEvent, jsEvent, view){ calendar.fn.eventClick(calEvent, jsEvent, view); }',
+                'eventAfterAllRender' => 'function(view){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); }'
             ]);
 
         $calendars = \Datamap::getCalendars();
@@ -108,10 +116,16 @@ class EventController extends Controller
     {
         $this->authorize('edit', $event);
 
-        $data = array_filter($request->only(Event::getFillableFields()), function ($value) {
+        $data = array_filter($request->only(Event::getFillableFields([], ['google_calendar_id', 'google_event_id'])), function ($value) {
             return ! is_null($value);
         });
-        $data['google_calendar_id'] = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
+        $oldGcId = $event->google_calendar_id;
+        $newGcId = \Datamap::getCalendarByName($request->get('calendar', 'default'))['gcid'];
+        if($oldGcId != $newGcId) {
+            $event->deleteGoogleEvent();
+            $event->google_calendar_id = $newGcId;
+            $event->createGoogleEvent();
+        }
 
         $event->update($data);
 

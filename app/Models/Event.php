@@ -186,7 +186,11 @@ class Event extends Model implements IdentifiableEvent
     public function getGoogleEvent()
     {
         if ($this->hasGoogleEvent()) {
-            return GoogleEvent::find($this->google_event_id, $this->google_calendar_id);
+            try {
+                return GoogleEvent::find($this->google_event_id, $this->google_calendar_id);
+            } catch (\Exception $e) {
+                \Log::warning($e);
+            }
         }
     }
 
@@ -253,6 +257,10 @@ class Event extends Model implements IdentifiableEvent
         if ($this->isGoogleEvent($event)) {
             try {
                 $event->delete();
+                $this->update([
+                    'google_calendar_id' => null,
+                    'google_event_id' => null,
+                ]);
             } catch (\Exception $e) {
                 \Log::warning($e);
             }
