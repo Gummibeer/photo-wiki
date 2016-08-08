@@ -39,7 +39,7 @@ class EventController extends Controller
         ])
             ->setCallbacks([
                 'eventClick' => 'function(calEvent, jsEvent, view){ calendar.fn.eventClick(calEvent, jsEvent, view); }',
-                'eventAfterAllRender' => 'function(view){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); }',
+                'eventAfterAllRender' => 'function(view){ if(jQuery(view.el).data(\'loaded\') != 1){ view.calendar.gotoDate(moment(\''.$default->format('Y-m-d').'\')); jQuery(view.el).data(\'loaded\', 1); } }',
             ]);
 
         foreach ($calendars as $config) {
