@@ -46,6 +46,15 @@
         <script src="{{ asset('js/libs/html5shiv.min.js') }}"></script>
         <script src="{{ asset('js/libs/respond.min.js') }}"></script>
     <![endif]-->
+
+    <script type='text/javascript'>
+        (function(w) {
+            var d=document,h=d.getElementsByTagName('head')[0],j=d.createElement('script'),k=d.createElement('script');
+            j.setAttribute('src','//cdn.adsoptimal.com/advertisement/settings/36519.js');
+            k.setAttribute('src','//cdn.adsoptimal.com/advertisement/manual.js');
+            h.appendChild(j); h.appendChild(k);
+        })(window);
+    </script>
 </head>
 <body class="@yield('body-class')">
     @include('google_analytics')
